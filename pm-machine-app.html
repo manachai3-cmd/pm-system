@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PM เครื่องจักร</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+
+:root{--bg:#0f1117;--bg2:#161b27;--bg3:#1e2535;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.15);--text:#e8eaf0;--text2:#8b91a8;--text3:#555d72;--accent:#4ade80;--warn:#fbbf24;--danger:#f87171;--info:#60a5fa;--font:'IBM Plex Sans Thai',sans-serif;--mono:'IBM Plex Mono',monospace;--r:10px;--rl:16px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(15,17,23,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 16px;display:flex;align-items:center;height:52px;gap:0;}
+.brand{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;margin-right:auto;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.nav-tabs{display:flex;gap:1px;}
+.ntab{padding:6px 12px;border-radius:6px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;border:none;background:none;font-family:var(--font);transition:all .15s;white-space:nowrap;}
+.ntab:hover{color:var(--text);background:rgba(255,255,255,.05);}
+.ntab.active{color:var(--text);background:rgba(255,255,255,.1);}
+.main{padding:14px 16px;max-width:700px;margin:0 auto;}
+.page{display:none;}.page.active{display:block;}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:16px 18px;margin-bottom:12px;}
+.card-title{font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--text2);text-transform:uppercase;margin-bottom:12px;}
+label{display:block;font-size:12px;color:var(--text2);margin:10px 0 4px;}
+input,select,textarea{width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:var(--r);padding:9px 12px;font-size:14px;color:var(--text);font-family:var(--font);outline:none;transition:border-color .15s;-webkit-appearance:none;}
+input:focus,select:focus,textarea:focus{border-color:rgba(74,222,128,.5);}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238b91a8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px;}
+textarea{min-height:72px;resize:vertical;}
+option{background:var(--bg2);}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 18px;border-radius:var(--r);font-size:14px;font-weight:500;cursor:pointer;border:none;font-family:var(--font);transition:all .15s;width:100%;margin-top:10px;}
+.btn-g{background:var(--accent);color:#0a1a10;}.btn-g:hover{opacity:.85;}.btn-g:disabled{opacity:.4;cursor:not-allowed;}
+.btn-s{background:var(--bg3);border:1px solid var(--border2);color:var(--text);}
+.chk-row{padding:11px 0;border-bottom:1px solid var(--border);}
+.chk-row:last-child{border-bottom:none;}
+.chk-name{font-size:13px;font-weight:500;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;}
+.chk-rm{background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;line-height:1;padding:0;}
+.chk-rm:hover{color:var(--danger);}
+.chk-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.chk-opt{display:flex;align-items:center;justify-content:center;gap:6px;padding:7px 6px;border-radius:8px;border:1px solid var(--border2);cursor:pointer;font-size:12px;font-weight:500;color:var(--text2);background:var(--bg);transition:all .15s;user-select:none;}
+.chk-opt:hover{border-color:var(--border);color:var(--text);}
+.chk-opt.sel-ok{background:rgba(74,222,128,.12);border-color:#4ade80;color:#4ade80;}
+.chk-opt.sel-warn{background:rgba(251,191,36,.12);border-color:#fbbf24;color:#fbbf24;}
+.chk-opt.sel-fix{background:rgba(248,113,113,.12);border-color:#f87171;color:#f87171;}
+.chk-opt .dot{width:8px;height:8px;border-radius:50%;background:currentColor;flex-shrink:0;}
+.mea-row{display:grid;grid-template-columns:1fr 90px 44px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);}
+.mea-row:last-child{border-bottom:none;}
+.ov-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px;}
+.ov-opt{border:1px solid var(--border2);border-radius:var(--r);padding:10px;text-align:center;cursor:pointer;font-size:13px;background:var(--bg);transition:all .15s;}
+.ov-ok{border-color:var(--accent);background:rgba(74,222,128,.1);color:var(--accent);}
+.ov-warn{border-color:var(--warn);background:rgba(251,191,36,.1);color:var(--warn);}
+.ov-ng{border-color:var(--danger);background:rgba(248,113,113,.1);color:var(--danger);}
+.h-row{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;}
+.h-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.h-tag{font-size:11px;padding:3px 8px;border-radius:20px;background:rgba(96,165,250,.1);color:var(--info);font-family:var(--mono);}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center;padding:20px;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--rl);padding:22px;width:min(420px,100%);max-height:90vh;overflow-y:auto;}
+.modal-head{font-size:16px;font-weight:600;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;}
+.modal-x{background:none;border:none;color:var(--text2);cursor:pointer;font-size:22px;line-height:1;}
+.qr-box{display:flex;justify-content:center;background:white;border-radius:10px;padding:14px;margin-bottom:12px;}
+.empty{text-align:center;padding:30px 20px;color:var(--text2);font-size:14px;}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:10px 18px;font-size:13px;z-index:999;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;max-width:90vw;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.add-btn{width:100%;display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px dashed var(--border2);border-radius:var(--r);padding:11px 14px;font-size:13px;color:var(--text2);cursor:pointer;font-family:var(--font);transition:all .15s;margin-bottom:10px;}
+.add-btn:hover{color:var(--text);}
+.form-wrap{overflow:hidden;max-height:0;transition:max-height .3s ease;}
+.form-wrap.open{max-height:500px;}
+.add-sm{background:rgba(255,255,255,.07);border:none;color:var(--text2);padding:4px 10px;border-radius:6px;font-size:12px;cursor:pointer;font-family:var(--font);}
+.add-sm:hover{background:rgba(255,255,255,.12);}
+.trow{display:grid;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s;}
+.trow:last-child{border-bottom:none;}
+.trow:hover{background:rgba(255,255,255,.035);}
+@media(max-width:480px){.main{padding:12px;}.grid2{grid-template-columns:1fr;}.ntab span{display:none;}}
+
+
+.rep-prio-opt{border:1px solid var(--border2);border-radius:var(--r);padding:10px 6px;text-align:center;cursor:pointer;background:var(--bg);transition:all .15s;color:var(--text2);}
+.rep-prio-opt:hover{border-color:var(--border);}
+.sel-low{border-color:#4ade80;background:rgba(74,222,128,.1);color:#4ade80;}
+.sel-mid{border-color:#fbbf24;background:rgba(251,191,36,.1);color:#fbbf24;}
+.sel-high{border-color:#f87171;background:rgba(248,113,113,.1);color:#f87171;}
+.rep-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:13px 14px;margin-bottom:8px;}
+.rep-card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+.rep-actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
+.rep-btn{padding:5px 10px;border-radius:6px;font-size:12px;cursor:pointer;border:none;font-family:var(--font);font-weight:500;transition:all .15s;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><div class="dot"></div>PM System</div>
+  <div id="sync-status" style="font-size:11px;color:var(--text3);margin-right:8px;white-space:nowrap;">กำลังโหลด...</div>
+  <nav class="nav-tabs">
+    <button class="ntab active" onclick="goPage('machines',this)">🖥 <span>เครื่องจักร</span></button>
+    <button class="ntab" onclick="goPage('form',this)">📋 <span>บันทึก PM</span></button>
+    <button class="ntab" onclick="goPage('plan',this)">📅 <span>แผน PM</span></button>
+    <button class="ntab" onclick="goPage('repair',this)">🔧 <span>แจ้งซ่อม</span></button>
+    <button class="ntab" onclick="goPage('history',this)">🕐 <span>ประวัติ</span></button>
+  </nav>
+</div>
+
+<div class="main">
+
+<!-- หน้าเครื่องจักร -->
+<div id="page-machines" class="page active">
+  <div class="card" style="padding:18px 16px;">
+    <div style="font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--text2);text-transform:uppercase;margin-bottom:14px;">สถานะ PM เดือนนี้</div>
+    <div style="display:flex;gap:16px;align-items:center;">
+
+      <!-- Donut -->
+      <div style="position:relative;flex-shrink:0;width:150px;height:150px;">
+        <canvas id="donut-chart" width="150" height="150"></canvas>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;">
+          <div id="donut-num" style="font-size:28px;font-weight:600;font-family:var(--mono);line-height:1;">0</div>
+          <div id="donut-label" style="font-size:11px;color:var(--text2);margin-top:2px;">เครื่องเดือนนี้</div>
+        </div>
+      </div>
+
+      <!-- Right panel: legend + alerts -->
+      <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px;">
+
+        <!-- Legend -->
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="width:10px;height:10px;border-radius:3px;background:#4ade80;display:inline-block;flex-shrink:0;"></span>
+              <span style="font-size:12px;color:var(--text2);">ทำแล้ว</span>
+            </div>
+            <span id="leg-ok" style="font-size:16px;font-weight:600;font-family:var(--mono);color:#4ade80;">0</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="width:10px;height:10px;border-radius:3px;background:#f87171;display:inline-block;flex-shrink:0;"></span>
+              <span style="font-size:12px;color:var(--text2);">ยังไม่ทำ</span>
+            </div>
+            <span id="leg-due" style="font-size:16px;font-weight:600;font-family:var(--mono);color:#f87171;">0</span>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div style="height:1px;background:var(--border);"></div>
+
+        <!-- Notification alerts -->
+        <div id="notif-panel">
+          <div style="font-size:11px;font-weight:600;color:var(--text2);letter-spacing:.04em;margin-bottom:6px;">การแจ้งเตือน</div>
+          <div id="notif-list" style="display:flex;flex-direction:column;gap:5px;"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div id="alert-machines"></div>
+  <button class="add-btn" onclick="toggleAdd()">+ เพิ่มเครื่องจักรใหม่</button>
+  <div class="form-wrap" id="add-wrap">
+    <div class="card" style="margin-bottom:10px;">
+      <div class="grid2">
+        <div><label>รหัสเครื่อง</label><input id="n-id" placeholder="MC-004"></div>
+        <div><label>ชื่อเครื่องจักร</label><input id="n-name" placeholder="CNC Machine"></div>
+        <div><label>โซน/ตำแหน่ง</label><input id="n-zone" placeholder="Zone A"></div>
+        <div><label>PM ทุก (เดือน)</label><input type="number" id="n-freq" value="1" min="1"></div>
+      </div>
+      <button class="btn btn-g" onclick="addMachine()">+ เพิ่มเครื่องจักร</button>
+    </div>
+  </div>
+  <button class="btn btn-s" onclick="syncSheets()" style="margin-top:0;">↻ รีเฟรชข้อมูลจาก Sheets</button>
+
+
+</div>
+
+<!-- หน้าบันทึก PM -->
+<div id="page-form" class="page">
+  <div class="card">
+    <div class="card-title">ข้อมูลทั่วไป</div>
+    <label>เครื่องจักร</label>
+    <select id="f-machine" onchange="onMachineChange()"></select>
+    <div id="f-info" style="font-size:12px;color:var(--text2);margin-top:5px;display:none;"></div>
+    <div class="grid2">
+      <div><label>ชื่อผู้ตรวจ</label><input id="f-inspector" placeholder="ชื่อช่าง"></div>
+      <div><label>วันที่ตรวจ</label><input type="date" id="f-date"></div>
+    </div>
+    <label>ประเภท PM</label>
+    <select id="f-type">
+      <option>PM รายวัน</option><option>PM รายสัปดาห์</option>
+      <option selected>PM รายเดือน</option><option>PM รายไตรมาส</option>
+    </select>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <div class="card-title" style="margin:0;">รายการตรวจสอบ</div>
+      <button class="add-sm" onclick="addCheck()">+ เพิ่ม</button>
+    </div>
+    <div id="chk-list"></div>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <div class="card-title" style="margin:0;">การวัดค่า</div>
+      <button class="add-sm" onclick="addMeasure()">+ เพิ่ม</button>
+    </div>
+    <div id="mea-list"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">สรุปผลการตรวจ</div>
+    <div class="ov-wrap">
+      <div class="ov-opt ov-ok" id="ov-ok" onclick="setOv('ok')"><div style="font-size:20px;margin-bottom:4px;">✅</div>ปกติ</div>
+      <div class="ov-opt" id="ov-warn" onclick="setOv('warn')"><div style="font-size:20px;margin-bottom:4px;">⚠️</div>ติดตาม</div>
+      <div class="ov-opt" id="ov-ng" onclick="setOv('ng')"><div style="font-size:20px;margin-bottom:4px;">❌</div>ต้องซ่อม</div>
+    </div>
+    <label>หมายเหตุ</label>
+    <textarea id="f-note" placeholder="บันทึกสิ่งที่พบ..."></textarea>
+  </div>
+  <button class="btn btn-g" id="save-btn" onclick="savePM()">💾 บันทึก PM</button>
+</div>
+
+<!-- หน้าแผน PM -->
+<div id="page-plan" class="page">
+  <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+    <select id="plan-filter" onchange="renderPlan()" style="flex:1;min-width:120px;">
+      <option value="">ทั้งหมด</option>
+      <option value="done">✅ ทำแล้ว</option>
+      <option value="pending">⏳ ยังไม่ทำ</option>
+      <option value="none">— ยังไม่กำหนดเดือน</option>
+    </select>
+    <input type="text" id="plan-search" placeholder="ค้นหาชื่อ / รหัส..." oninput="renderPlan()" style="flex:2;min-width:150px;">
+  </div>
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div style="display:grid;grid-template-columns:1fr 80px 90px;border-bottom:1px solid var(--border);padding:9px 14px;background:var(--bg3);">
+      <div style="font-size:11px;font-weight:600;color:var(--text2);letter-spacing:.04em;">เครื่องจักร</div>
+      <div style="font-size:11px;font-weight:600;color:var(--text2);text-align:center;">เดือน PM</div>
+      <div style="font-size:11px;font-weight:600;color:var(--text2);text-align:center;">สถานะ</div>
+    </div>
+    <div id="plan-body"></div>
+  </div>
+  <div id="plan-count" style="font-size:12px;color:var(--text2);margin-top:8px;text-align:right;"></div>
+</div>
+
+
+<!-- หน้าแจ้งซ่อม -->
+<div id="page-repair" class="page">
+
+  <!-- Summary strip -->
+  <div style="display:flex;align-items:center;gap:16px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px 16px;margin-bottom:12px;">
+    <div style="font-size:28px;">🔧</div>
+    <div style="display:flex;gap:16px;flex:1;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#f87171;display:inline-block;"></span>
+        <span style="font-size:13px;color:var(--text2);">รอดำเนินการ</span>
+        <span id="rep-open" style="font-size:16px;font-weight:600;font-family:var(--mono);color:#f87171;">0</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#fbbf24;display:inline-block;"></span>
+        <span style="font-size:13px;color:var(--text2);">กำลังซ่อม</span>
+        <span id="rep-inprog" style="font-size:16px;font-weight:600;font-family:var(--mono);color:#fbbf24;">0</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#4ade80;display:inline-block;"></span>
+        <span style="font-size:13px;color:var(--text2);">ซ่อมแล้ว</span>
+        <span id="rep-done" style="font-size:16px;font-weight:600;font-family:var(--mono);color:#4ade80;">0</span>
+      </div>
+    </div>
+    <div id="rep-total" style="display:none;"></div>
+  </div>
+
+  <!-- ปุ่มแจ้งซ่อมใหม่ -->
+  <button class="add-btn" onclick="toggleRepairForm()">🔧 แจ้งซ่อมเครื่องจักร</button>
+  <div class="form-wrap" id="repair-form-wrap">
+    <div class="card" style="margin-bottom:10px;">
+      <div class="card-title">รายละเอียดการแจ้งซ่อม</div>
+      <label>เครื่องจักร</label>
+      <select id="rep-machine"></select>
+      <label>ผู้แจ้ง</label>
+      <input id="rep-reporter" placeholder="ชื่อผู้แจ้ง">
+      <label>อาการเสีย / ปัญหาที่พบ</label>
+      <textarea id="rep-desc" placeholder="อธิบายอาการเสียหรือปัญหาที่พบ..." style="min-height:90px;"></textarea>
+      <label>ระดับความเร่งด่วน</label>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px;">
+        <div class="rep-prio-opt sel-low" id="rp-low" onclick="setRepPrio('low')">
+          <div style="font-size:16px;margin-bottom:3px;">🟢</div>
+          <div style="font-size:12px;font-weight:500;">ต่ำ</div>
+          <div style="font-size:10px;color:currentColor;opacity:.7;">ไม่เร่งด่วน</div>
+        </div>
+        <div class="rep-prio-opt" id="rp-mid" onclick="setRepPrio('mid')">
+          <div style="font-size:16px;margin-bottom:3px;">🟡</div>
+          <div style="font-size:12px;font-weight:500;">กลาง</div>
+          <div style="font-size:10px;opacity:.7;">แก้ภายใน 3 วัน</div>
+        </div>
+        <div class="rep-prio-opt" id="rp-high" onclick="setRepPrio('high')">
+          <div style="font-size:16px;margin-bottom:3px;">🔴</div>
+          <div style="font-size:12px;font-weight:500;">สูง</div>
+          <div style="font-size:10px;opacity:.7;">หยุดสายการผลิต</div>
+        </div>
+      </div>
+      <button class="btn btn-g" onclick="submitRepair()" style="margin-top:14px;">📨 ส่งแจ้งซ่อม</button>
+    </div>
+  </div>
+
+  <!-- filter -->
+  <div style="display:flex;gap:8px;margin-bottom:10px;">
+    <select id="rep-filter" onchange="renderRepairs()" style="flex:1;">
+      <option value="">ทั้งหมด</option>
+      <option value="open">รอดำเนินการ</option>
+      <option value="inprogress">กำลังซ่อม</option>
+      <option value="done">ซ่อมแล้ว</option>
+    </select>
+    <select id="rep-prio-filter" onchange="renderRepairs()" style="max-width:120px;">
+      <option value="">ทุกระดับ</option>
+      <option value="high">🔴 สูง</option>
+      <option value="mid">🟡 กลาง</option>
+      <option value="low">🟢 ต่ำ</option>
+    </select>
+  </div>
+
+  <div id="repair-list"></div>
+</div>
+
+<!-- หน้าประวัติ -->
+<div id="page-history" class="page">
+  <div style="display:flex;gap:8px;margin-bottom:12px;">
+    <select id="h-mf" onchange="renderHistory()" style="flex:1;"></select>
+    <select id="h-sf" onchange="renderHistory()" style="max-width:130px;">
+      <option value="">สถานะทั้งหมด</option>
+      <option value="ok">ปกติ</option><option value="warn">ติดตาม</option><option value="ng">ต้องซ่อม</option>
+    </select>
+  </div>
+  <div id="h-list"></div>
+</div>
+
+</div>
+
+
+<!-- QR Print Modal -->
+<div class="modal-bg" id="qr-print-modal">
+  <div class="modal" style="max-width:500px;">
+    <div class="modal-head">
+      <span>🖨 พิมพ์ QR แจ้งซ่อม</span>
+      <button class="modal-x" onclick="document.getElementById('qr-print-modal').classList.remove('open')">×</button>
+    </div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:12px;">เลือกเครื่องที่ต้องการพิมพ์ QR Code สำหรับติดที่เครื่อง</div>
+
+    <!-- Base URL input -->
+    <div style="margin-bottom:12px;">
+      <label style="display:block;font-size:12px;color:var(--text2);margin-bottom:4px;">URL ของไฟล์ repair-form.html (host ที่ไหน)</label>
+      <input type="text" id="repair-url-base" placeholder="https://yoursite.github.io/repair-form.html" style="font-size:12px;">
+      <div style="font-size:11px;color:var(--text3);margin-top:4px;">ถ้าเปิดไฟล์ในเครื่องให้ใส่ path ของไฟล์ repair-form.html</div>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-bottom:10px;">
+      <input type="text" id="qr-search-print" placeholder="ค้นหาเครื่อง..." oninput="filterQRList()" style="flex:1;font-size:13px;">
+      <button onclick="printAllQR()" style="background:var(--danger);border:none;color:white;padding:8px 14px;border-radius:var(--r);font-size:13px;cursor:pointer;font-family:var(--font);white-space:nowrap;">พิมพ์ทั้งหมด</button>
+    </div>
+
+    <div id="qr-machine-list" style="max-height:350px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;"></div>
+  </div>
+</div>
+
+<!-- QR Modal -->
+<div class="modal-bg" id="qr-modal">
+  <div class="modal">
+    <div class="modal-head"><span id="qr-title"></span><button class="modal-x" onclick="closeQR()">×</button></div>
+    <div class="qr-box"><div id="qr-div"></div></div>
+    <div style="text-align:center;font-size:12px;color:var(--text2);margin-bottom:12px;font-family:var(--mono);" id="qr-sub"></div>
+    <button class="btn btn-g" onclick="goFormFromQR()">📋 เปิดฟอร์ม PM เครื่องนี้</button>
+    <button class="btn btn-s" onclick="printQR()" style="margin-top:8px;">🖨 พิมพ์ QR Code</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwQg_mH3WXc35KC2ukOyrTo8viSZ4t1iXeyiVWMkYN-TjQVkLwzNcqHVYk-6o7nFB_4/exec';
+const DEFAULT_CHECKS = [
+  'ตรวจสอบระดับน้ำมัน',
+  'ตรวจสอบระดับน้ำหล่อเย็น',
+  'ตรวจสอบสายพาน/โซ่',
+  'ตรวจสอบแรงดันลม',
+  'ความสะอาดเครื่องจักร',
+  'ตรวจสอบระบบไฟฟ้า — สายไฟ, ขั้วต่อ, กราวด์',
+  'ตรวจสอบตู้คอนโทรล — ฝุ่น, ความร้อน, สัญญาณเตือน',
+  'ตรวจสอบปุ่ม Emergency Stop',
+  'ตรวจสอบ Sensor และสัญญาณไฟ',
+];
+const DEFAULT_MEASURES = [{name:'อุณหภูมิ',unit:'°C'},{name:'แรงดัน',unit:'bar'},{name:'กระแสไฟ',unit:'A'}];
+const MONTHS_TH = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+const MONTHS_EN = ['january','february','march','april','may','june','july','august','september','october','november','december'];
+
+let machines = JSON.parse(localStorage.getItem('pm_m') || 'null') || [];
+let pmHistory = JSON.parse(localStorage.getItem('pm_h') || '[]');
+let selM = null, ov = 'ok', checks = [], measures = [];
+
+function save(){ localStorage.setItem('pm_m',JSON.stringify(machines)); localStorage.setItem('pm_h',JSON.stringify(pmHistory)); }
+
+function matchMonth(s, mo){
+  if(!s) return false;
+  const t = s.toString().toLowerCase().trim();
+  if(MONTHS_EN[mo] && (MONTHS_EN[mo].startsWith(t) || t.startsWith(MONTHS_EN[mo].slice(0,3)))) return true;
+  if(MONTHS_TH[mo] && (MONTHS_TH[mo].includes(t) || t===MONTHS_TH[mo])) return true;
+  const n = parseInt(t); if(!isNaN(n) && n===mo+1) return true;
+  return false;
+}
+
+function parseDate(s){ if(!s) return null; const p=s.split('-'); return new Date(+p[0],+p[1]-1,+p[2]); }
+
+function isPMDoneThisMonth(m, yr, mo){
+  if(!m.lastPM) return false;
+  const d = parseDate(m.lastPM);
+  return d && d.getFullYear()===yr && d.getMonth()===mo;
+}
+
+function toast(msg,dur=2500){ const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),dur); }
+
+// Navigation
+function goPage(name, btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ntab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  btn.classList.add('active');
+  if(name==='machines') renderMachines();
+  if(name==='form')     initForm();
+  if(name==='plan')     renderPlan();
+  if(name==='repair')   renderRepairs();
+  if(name==='history')  renderHistory();
+}
+
+function goToPMForm(machineId){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ntab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-form').classList.add('active');
+  document.querySelectorAll('.ntab')[1].classList.add('active');
+  initForm();
+  setTimeout(()=>{ const s=document.getElementById('f-machine'); if(s){s.value=machineId;onMachineChange();} window.scrollTo({top:0,behavior:'smooth'}); },60);
+}
+
+// หน้าเครื่องจักร
+function renderMachines(){
+  const now=new Date(), yr=now.getFullYear(), mo=now.getMonth();
+  const thisMonth = machines.filter(m=>matchMonth(m.month,mo));
+  let ok=0, due=0;
+  thisMonth.forEach(m=>{ isPMDoneThisMonth(m,yr,mo)?ok++:due++; });
+  const total=thisMonth.length;
+  document.getElementById('donut-num').textContent=total;
+  document.getElementById('leg-ok').textContent=ok;
+  document.getElementById('leg-due').textContent=due;
+  drawDonut(ok,due,total);
+  renderAlertList(thisMonth,yr,mo);
+  renderNotifications(thisMonth,yr,mo);
+}
+
+function renderNotifications(thisMonth, yr, mo){
+  const pending = thisMonth.filter(m=>!isPMDoneThisMonth(m,yr,mo));
+  const highRepairs = repairs.filter(r=>r.prio==='high' && r.status!=='done');
+  const midRepairs  = repairs.filter(r=>r.prio==='mid'  && r.status!=='done');
+
+  const notifs = [];
+
+  // PM ที่ยังไม่ทำ
+  if(pending.length){
+    notifs.push({
+      icon:'⚠️',
+      color:'#fbbf24',
+      bg:'rgba(251,191,36,.1)',
+      border:'rgba(251,191,36,.25)',
+      text:`PM ค้าง ${pending.length} เครื่อง`,
+      sub: pending.slice(0,2).map(m=>m.name.split(' ').slice(0,3).join(' ')).join(', ') + (pending.length>2?` +${pending.length-2}`:''),
+      action: "scrollToAlert()"
+    });
+  }
+
+  // งานซ่อมเร่งด่วนสูง
+  if(highRepairs.length){
+    notifs.push({
+      icon:'🔴',
+      color:'#f87171',
+      bg:'rgba(248,113,113,.1)',
+      border:'rgba(248,113,113,.25)',
+      text:`ซ่อมด่วน ${highRepairs.length} รายการ`,
+      sub: highRepairs.slice(0,2).map(r=>r.machineName.split(' ').slice(0,3).join(' ')).join(', ') + (highRepairs.length>2?` +${highRepairs.length-2}`:''),
+      action: "goPage('repair', document.querySelectorAll('.ntab')[3])"
+    });
+  }
+
+  // งานซ่อมระดับกลาง
+  if(midRepairs.length){
+    notifs.push({
+      icon:'🟡',
+      color:'#fbbf24',
+      bg:'rgba(251,191,36,.08)',
+      border:'rgba(251,191,36,.2)',
+      text:`รอซ่อม ${midRepairs.length} รายการ`,
+      sub: midRepairs.slice(0,2).map(r=>r.machineName.split(' ').slice(0,3).join(' ')).join(', ') + (midRepairs.length>2?` +${midRepairs.length-2}`:''),
+      action: "goPage('repair', document.querySelectorAll('.ntab')[3])"
+    });
+  }
+
+  // งานซ่อมระดับต่ำ
+  const lowRepairs = repairs.filter(r=>r.prio==='low' && r.status!=='done');
+  if(lowRepairs.length){
+    notifs.push({
+      icon:'🟢',
+      color:'#4ade80',
+      bg:'rgba(74,222,128,.08)',
+      border:'rgba(74,222,128,.2)',
+      text:`แจ้งซ่อม (ไม่เร่งด่วน) ${lowRepairs.length} รายการ`,
+      sub: lowRepairs.slice(0,2).map(r=>r.machineName.split(' ').slice(0,3).join(' ')).join(', ') + (lowRepairs.length>2?` +${lowRepairs.length-2}`:''),
+      action: "goPage('repair', document.querySelectorAll('.ntab')[3])"
+    });
+  }
+
+  const el = document.getElementById('notif-list');
+  if(!el) return;
+
+  if(!notifs.length){
+    el.innerHTML = '<div style="font-size:12px;color:var(--accent);display:flex;align-items:center;gap:5px;">✅ <span>ไม่มีการแจ้งเตือน</span></div>';
+    return;
+  }
+
+  el.innerHTML = notifs.map(n=>`
+    <div onclick="${n.action||''}" style="display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:8px;background:${n.bg};border:1px solid ${n.border};${n.action?'cursor:pointer;':''};transition:opacity .15s;"
+      ${n.action?`onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'"`:''}>
+      <span style="font-size:15px;flex-shrink:0;">${n.icon}</span>
+      <div style="min-width:0;flex:1;">
+        <div style="font-size:12px;font-weight:600;color:${n.color};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${n.text}</div>
+        <div style="font-size:10px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${n.sub}</div>
+      </div>
+      ${n.action?'<span style="color:var(--text3);font-size:14px;">›</span>':''}
+    </div>`).join('');
+}
+
+function drawDonut(ok,due,total){
+  const canvas=document.getElementById('donut-chart'); if(!canvas) return;
+  const ctx=canvas.getContext('2d'), cx=75,cy=75,outer=68,inner=44;
+  ctx.clearRect(0,0,150,150);
+  if(total===0){
+    ctx.beginPath();ctx.arc(cx,cy,outer,0,Math.PI*2);
+    ctx.strokeStyle='rgba(255,255,255,.08)';ctx.lineWidth=outer-inner;ctx.stroke();
+    return;
+  }
+  const segs=[{v:ok,c:'#4ade80',g:'rgba(74,222,128,.4)'},{v:due,c:'#f87171',g:'rgba(248,113,113,.4)'}].filter(s=>s.v>0);
+  let ang=-Math.PI/2, gap=total>1?.035:0;
+  segs.forEach(s=>{
+    const sl=(s.v/total)*Math.PI*2, end=ang+sl-gap;
+    ctx.save();ctx.shadowColor=s.g;ctx.shadowBlur=14;
+    ctx.beginPath();ctx.arc(cx,cy,outer,ang,end);ctx.arc(cx,cy,inner,end,ang,true);ctx.closePath();
+    ctx.fillStyle=s.c;ctx.fill();ctx.restore();
+    ang+=sl;
+  });
+  ctx.beginPath();ctx.arc(cx,cy,inner-2,0,Math.PI*2);ctx.fillStyle='#161b27';ctx.fill();
+}
+
+function renderAlertList(thisMonth,yr,mo){
+  const container=document.getElementById('alert-machines');
+  if(!thisMonth.length){
+    container.innerHTML=`<div class="card" style="text-align:center;color:var(--text2);font-size:13px;padding:18px;">ไม่มีเครื่องที่กำหนด PM เดือน${MONTHS_TH[mo]}</div>`;
+    return;
+  }
+  const pending=thisMonth.filter(m=>!isPMDoneThisMonth(m,yr,mo));
+  const done=thisMonth.filter(m=>isPMDoneThisMonth(m,yr,mo));
+  let html=`<div class="card" style="padding:0;overflow:hidden;">
+    <div style="padding:9px 14px;background:var(--bg3);border-bottom:1px solid var(--border);font-size:12px;font-weight:600;color:var(--text2);letter-spacing:.04em;">
+      📋 แผน PM เดือน${MONTHS_TH[mo]} ${yr+543} · ${thisMonth.length} เครื่อง
+    </div>`;
+  if(pending.length){
+    html+=`<div style="padding:6px 14px;background:rgba(248,113,113,.06);border-bottom:1px solid var(--border);font-size:11px;font-weight:600;color:var(--danger);">⏳ ยังไม่ได้ทำ (${pending.length})</div>`;
+    html+=pending.map((m,i)=>`<div onclick="goToPMForm('${m.id}')" class="trow" style="grid-template-columns:1fr auto;">
+      <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+        <span style="width:7px;height:7px;border-radius:50%;background:#f87171;flex-shrink:0;box-shadow:0 0 6px rgba(248,113,113,.5);"></span>
+        <div style="min-width:0;">
+          <div style="font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${m.name}</div>
+          <div style="font-size:11px;color:var(--text2);">${m.id}${m.zone?' · '+m.zone:''} · PM ล่าสุด: ${m.lastPM||'ยังไม่เคย'}</div>
+        </div>
+      </div>
+      <span style="color:var(--text3);font-size:16px;margin-left:8px;">›</span>
+    </div>`).join('');
+  }
+  if(done.length){
+    html+=`<div style="padding:6px 14px;background:rgba(74,222,128,.06);border-bottom:1px solid var(--border);font-size:11px;font-weight:600;color:var(--accent);">✅ ทำแล้ว (${done.length})</div>`;
+    html+=done.map((m,i)=>`<div onclick="goToPMForm('${m.id}')" class="trow" style="grid-template-columns:1fr auto;opacity:.7;">
+      <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+        <span style="width:7px;height:7px;border-radius:50%;background:#4ade80;flex-shrink:0;"></span>
+        <div style="min-width:0;">
+          <div style="font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${m.name}</div>
+          <div style="font-size:11px;color:var(--text2);">${m.id}${m.zone?' · '+m.zone:''}</div>
+        </div>
+      </div>
+      <span style="font-size:11px;color:var(--accent);">✅ ${m.lastPM}</span>
+    </div>`).join('');
+  }
+  html+='</div>';
+  container.innerHTML=html;
+}
+
+function toggleAdd(){ document.getElementById('add-wrap').classList.toggle('open'); }
+function addMachine(){
+  const id=document.getElementById('n-id').value.trim();
+  const name=document.getElementById('n-name').value.trim();
+  if(!id||!name){toast('⚠️ กรุณากรอกรหัสและชื่อ');return;}
+  if(machines.find(m=>m.id===id)){toast('⚠️ รหัสซ้ำ');return;}
+  machines.push({id,name,zone:document.getElementById('n-zone').value.trim(),freq:parseInt(document.getElementById('n-freq').value)||1,month:'',lastPM:'',status:''});
+  save();renderMachines();
+  ['n-id','n-name','n-zone'].forEach(x=>document.getElementById(x).value='');
+  document.getElementById('add-wrap').classList.remove('open');
+  toast('✅ เพิ่มเครื่องจักรแล้ว');
+}
+
+// QR
+function openQR(i){
+  selM=machines[i];const m=selM;
+  document.getElementById('qr-title').textContent=m.name;
+  document.getElementById('qr-sub').textContent=m.id+(m.zone?' · '+m.zone:'');
+  const div=document.getElementById('qr-div');div.innerHTML='';
+  new QRCode(div,{text:'PM:'+m.id+'|'+m.name,width:180,height:180,colorDark:'#000',colorLight:'#fff',correctLevel:QRCode.CorrectLevel.M});
+  document.getElementById('qr-modal').classList.add('open');
+}
+function closeQR(){document.getElementById('qr-modal').classList.remove('open');}
+function goFormFromQR(){closeQR();goToPMForm(selM.id);}
+function printQR(){
+  const m=selM,c=document.querySelector('#qr-div canvas');if(!c)return;
+  const w=window.open('','_blank');
+  w.document.write(`<html><body style="text-align:center;font-family:sans-serif;padding:30px;"><img src="${c.toDataURL()}" style="width:200px;height:200px;display:block;margin:0 auto 12px;"><b style="font-size:18px;display:block;">${m.name}</b><span style="color:#666;">${m.id}</span></body></html>`);
+  w.document.close();w.print();
+}
+
+// ฟอร์ม PM
+function initForm(){
+  const sel=document.getElementById('f-machine');
+  sel.innerHTML=machines.map(m=>`<option value="${m.id}">${m.name} (${m.id})</option>`).join('');
+  document.getElementById('f-date').value=new Date().toISOString().slice(0,10);
+  window.chkState={};checks=[...DEFAULT_CHECKS];measures=DEFAULT_MEASURES.map(x=>({...x,value:''}));
+  ov='ok';setOv('ok');renderChecks();renderMeasures();onMachineChange();
+  const hf=document.getElementById('h-mf');
+  hf.innerHTML='<option value="">เครื่องทั้งหมด</option>'+machines.map(m=>`<option value="${m.id}">${m.name}</option>`).join('');
+}
+function onMachineChange(){
+  const id=document.getElementById('f-machine').value;
+  const m=machines.find(x=>x.id===id);
+  const el=document.getElementById('f-info');
+  if(m){el.style.display='block';el.textContent=(m.zone||'')+(m.zone?' · ':'')+`ทุก ${m.freq} เดือน · PM ล่าสุด: ${m.lastPM||'ยังไม่เคย'}`;}
+}
+function renderChecks(){
+  document.getElementById('chk-list').innerHTML=checks.map((c,i)=>`
+    <div class="chk-row">
+      <div class="chk-name">
+        <span>${c}</span>
+        <button class="chk-rm" onclick="removeCheck(${i})">×</button>
+      </div>
+      <div class="chk-opts">
+        <div class="chk-opt sel-ok" id="co-${i}-ok" onclick="selectChk(${i},'ok')">
+          <span class="dot"></span> ปกติ
+        </div>
+        <div class="chk-opt" id="co-${i}-warn" onclick="selectChk(${i},'warn')">
+          <span class="dot"></span> ผิดปกติ
+        </div>
+        <div class="chk-opt" id="co-${i}-fix" onclick="selectChk(${i},'fix')">
+          <span class="dot"></span> ต้องแก้ไข
+        </div>
+      </div>
+    </div>`).join('');
+  // เก็บ state ของแต่ละรายการ
+  if(!window.chkState) window.chkState={};
+  checks.forEach((_,i)=>{ if(!window.chkState[i]) window.chkState[i]='ok'; });
+}
+
+function selectChk(i, val){
+  if(!window.chkState) window.chkState={};
+  window.chkState[i]=val;
+  ['ok','warn','fix'].forEach(v=>{
+    const el=document.getElementById('co-'+i+'-'+v);
+    if(el) el.className='chk-opt'+(v===val?' sel-'+val:'');
+  });
+}
+function addCheck(){const n=prompt('ชื่อรายการตรวจสอบ:');if(n){checks.push(n);renderChecks();}}
+function removeCheck(i){
+  checks.splice(i,1);
+  // rebuild chkState
+  const newState={};
+  Object.keys(window.chkState||{}).forEach(k=>{
+    const ki=parseInt(k);
+    if(ki<i) newState[ki]=window.chkState[k];
+    else if(ki>i) newState[ki-1]=window.chkState[k];
+  });
+  window.chkState=newState;
+  renderChecks();
+}
+function renderMeasures(){
+  document.getElementById('mea-list').innerHTML=measures.map((m,i)=>`
+    <div class="mea-row"><span style="font-size:14px;">${m.name}</span>
+    <input type="number" placeholder="ค่าที่วัด" id="mv${i}" step="0.1">
+    <span style="font-size:12px;color:var(--text2);text-align:center;">${m.unit}</span></div>`).join('');
+}
+function addMeasure(){const n=prompt('ชื่อรายการวัด:');if(!n)return;const u=prompt('หน่วย:')||'';measures.push({name:n,unit:u,value:''});renderMeasures();}
+function setOv(v){
+  ov=v;
+  document.getElementById('ov-ok').className='ov-opt'+(v==='ok'?' ov-ok':'');
+  document.getElementById('ov-warn').className='ov-opt'+(v==='warn'?' ov-warn':'');
+  document.getElementById('ov-ng').className='ov-opt'+(v==='ng'?' ov-ng':'');
+}
+
+async function savePM(){
+  const machineId=document.getElementById('f-machine').value;
+  const inspector=document.getElementById('f-inspector').value.trim();
+  const date=document.getElementById('f-date').value;
+  const pmType=document.getElementById('f-type').value;
+  const note=document.getElementById('f-note').value;
+  if(!inspector){toast('⚠️ กรุณากรอกชื่อผู้ตรวจ');return;}
+  const m=machines.find(x=>x.id===machineId);
+  const chkData=checks.map((c,i)=>{
+    const v=(window.chkState||{})[i]||'ok';
+    const statusMap={ok:'ปกติ',warn:'ผิดปกติ',fix:'ต้องแก้ไข'};
+    return{name:c,checked:v==='ok',status:statusMap[v]||'ปกติ',val:v};
+  });
+  const meaData=measures.map((mv,i)=>({name:mv.name,unit:mv.unit,value:document.getElementById('mv'+i)?.value||''}));
+  const checkOK=chkData.filter(c=>c.checked).length;
+  const rec={id:Date.now(),machineId,machineName:m?.name||machineId,inspector,date,pmType,note,overall:ov,checks:chkData,measures:meaData,checkOK,checkTotal:chkData.length};
+  pmHistory.unshift(rec);
+  const idx=machines.findIndex(x=>x.id===machineId);
+  if(idx>=0) machines[idx].lastPM=date;
+  save();
+  const btn=document.getElementById('save-btn');
+  btn.disabled=true;btn.textContent='⏳ กำลังส่ง...';
+  try{
+    await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({
+      machineId,machineName:m?.name||machineId,inspector,date,pmType,
+      checkOK,checkTotal:chkData.length,
+      temperature:meaData.find(x=>x.name.includes('อุณหภูมิ'))?.value||'',
+      pressure:meaData.find(x=>x.name.includes('แรงดัน'))?.value||'',
+      current:meaData.find(x=>x.name.includes('กระแส'))?.value||'',
+      overall:ov,note
+    })});
+    toast('✅ บันทึกสำเร็จ! ข้อมูลเข้า Google Sheets แล้ว',3000);
+  }catch{toast('⚠️ บันทึก Local แล้ว ส่ง Sheets ไม่ได้',3000);}
+  btn.disabled=false;btn.textContent='💾 บันทึก PM';
+  document.getElementById('f-inspector').value='';document.getElementById('f-note').value='';
+  window.chkState={};checks=[...DEFAULT_CHECKS];measures=DEFAULT_MEASURES.map(x=>({...x,value:''}));
+  ov='ok';setOv('ok');renderChecks();renderMeasures();
+}
+
+// แผน PM — แสดงเครื่องทั้งหมด
+function renderPlan(){
+  const filter=document.getElementById('plan-filter')?.value||'';
+  const search=(document.getElementById('plan-search')?.value||'').toLowerCase();
+  const now=new Date(),yr=now.getFullYear(),mo=now.getMonth();
+
+  let list=machines;
+  if(search) list=list.filter(m=>m.name.toLowerCase().includes(search)||m.id.toLowerCase().includes(search));
+
+  const rows=list.map(m=>{
+    const done=isPMDoneThisMonth(m,yr,mo);
+    const hasMonth=!!m.month;
+    let st = !hasMonth?'none': done?'done':'pending';
+    return{m,st,done};
+  });
+
+  const filtered=filter?rows.filter(r=>r.st===filter):rows;
+  const body=document.getElementById('plan-body');
+  const countEl=document.getElementById('plan-count');
+
+  if(!filtered.length){body.innerHTML='<div class="empty">ไม่พบเครื่องจักร</div>';countEl.textContent='';return;}
+
+  const doneN=filtered.filter(r=>r.st==='done').length;
+  const pendN=filtered.filter(r=>r.st==='pending').length;
+  const noneN=filtered.filter(r=>r.st==='none').length;
+  countEl.innerHTML=`${filtered.length} เครื่อง &nbsp;·&nbsp; <span style="color:var(--accent)">✅ ${doneN}</span> &nbsp;·&nbsp; <span style="color:var(--warn)">⏳ ${pendN}</span> &nbsp;·&nbsp; <span style="color:var(--text3)">— ${noneN}</span>`;
+
+  body.innerHTML=filtered.map(({m,st},i)=>{
+    const isLast=i===filtered.length-1;
+    let dot,stText,stColor,rowBg;
+    if(st==='done'){dot='#4ade80';stText='✅ ทำแล้ว';stColor='var(--accent)';rowBg='rgba(74,222,128,.03)';}
+    else if(st==='pending'){dot='#fbbf24';stText='⏳ ยังไม่ทำ';stColor='var(--warn)';rowBg='rgba(251,191,36,.03)';}
+    else{dot='rgba(255,255,255,.15)';stText='—';stColor='var(--text3)';rowBg='transparent';}
+    return`<div onclick="goToPMForm('${m.id}')" class="trow" style="grid-template-columns:1fr 80px 90px;background:${rowBg};">
+      <div style="display:flex;align-items:center;gap:9px;min-width:0;">
+        <span style="width:7px;height:7px;border-radius:50%;background:${dot};flex-shrink:0;"></span>
+        <div style="min-width:0;">
+          <div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${m.name}</div>
+          <div style="font-size:11px;color:var(--text2);">${m.id} · ทุก ${m.freq} เดือน${m.lastPM?' · '+m.lastPM:''}</div>
+        </div>
+      </div>
+      <div style="text-align:center;font-size:12px;color:var(--text2);">${m.month||'—'}</div>
+      <div style="text-align:center;font-size:12px;color:${stColor};font-weight:500;">${stText}</div>
+    </div>`;
+  }).join('');
+}
+
+// ประวัติ
+function renderHistory(){
+  const mf=document.getElementById('h-mf').value, sf=document.getElementById('h-sf').value;
+  let recs=pmHistory;
+  if(mf) recs=recs.filter(r=>r.machineId===mf);
+  if(sf) recs=recs.filter(r=>r.overall===sf);
+  const el=document.getElementById('h-list');
+  if(!recs.length){el.innerHTML='<div class="empty">ยังไม่มีประวัติ PM</div>';return;}
+  const ico={ok:'✅',warn:'⚠️',ng:'❌'};
+  el.innerHTML=recs.map(r=>{
+    const tags=(r.measures||[]).filter(m=>m.value).map(m=>`<span class="h-tag">${m.name}: ${m.value} ${m.unit}</span>`).join('');
+    return`<div class="h-row">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+        <div><div style="font-size:14px;font-weight:500;">${r.machineName}</div>
+        <div style="font-size:12px;color:var(--text2);">${r.date} · ${r.pmType} · ${r.inspector}</div></div>
+        <span style="font-size:20px;">${ico[r.overall]||'✅'}</span>
+      </div>
+      <div style="font-size:12px;color:var(--text2);">Checklist: ${r.checkOK}/${r.checkTotal}${r.note?' · '+r.note:''}</div>
+      ${tags?`<div class="h-tags">${tags}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+// Sync Sheets
+async function syncSheets(){
+  updateStatusBar('⏳ กำลังซิงค์...');
+  await autoLoad();
+  toast('✅ โหลดสำเร็จ! พบ ' + machines.length + ' เครื่อง', 2500);
+}
+
+function resetAndSync(){
+  if(!confirm('ล้างข้อมูลเก่าทั้งหมดแล้วโหลดจาก Sheets ใหม่?')) return;
+  localStorage.removeItem('pm_m');localStorage.removeItem('pm_h');
+  machines=[];pmHistory=[];renderMachines();syncSheets();
+}
+
+
+// ── ระบบแจ้งซ่อม ──
+let repairs = JSON.parse(localStorage.getItem('pm_repairs') || '[]');
+let repPrio = 'low';
+
+function saveRepairs(){ localStorage.setItem('pm_repairs', JSON.stringify(repairs)); }
+
+function toggleRepairForm(){
+  document.getElementById('repair-form-wrap').classList.toggle('open');
+  // โหลด dropdown เครื่อง
+  const sel = document.getElementById('rep-machine');
+  sel.innerHTML = machines.map(m=>`<option value="${m.id}">${m.name} (${m.id})</option>`).join('');
+}
+
+function setRepPrio(p){
+  repPrio = p;
+  ['low','mid','high'].forEach(v=>{
+    document.getElementById('rp-'+v).className = 'rep-prio-opt' + (v===p?' sel-'+p:'');
+  });
+}
+
+function submitRepair(){
+  const machineId = document.getElementById('rep-machine').value;
+  const reporter  = document.getElementById('rep-reporter').value.trim();
+  const desc      = document.getElementById('rep-desc').value.trim();
+  if(!reporter){ toast('⚠️ กรุณากรอกชื่อผู้แจ้ง'); return; }
+  if(!desc){ toast('⚠️ กรุณาระบุอาการเสีย'); return; }
+  const m = machines.find(x=>x.id===machineId);
+  const rec = {
+    id: Date.now(),
+    machineId, machineName: m?.name||machineId,
+    reporter, desc, prio: repPrio,
+    status: 'open',
+    createdAt: new Date().toLocaleDateString('th-TH'),
+    updatedAt: '',
+    note: ''
+  };
+  repairs.unshift(rec);
+  saveRepairs();
+  document.getElementById('rep-reporter').value = '';
+  document.getElementById('rep-desc').value = '';
+  repPrio='low'; setRepPrio('low');
+  document.getElementById('repair-form-wrap').classList.remove('open');
+  renderRepairs();
+  toast('📨 แจ้งซ่อมแล้ว!', 2500);
+
+  // ส่งเข้า Google Sheets
+  sendRepairToSheets(rec);
+}
+
+async function sendRepairToSheets(rec){
+  try{
+    await fetch(SCRIPT_URL, {
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'text/plain'},
+      body: JSON.stringify({type:'repair', ...rec})
+    });
+  }catch{}
+}
+
+async function updateRepairStatus(id, newStatus){
+  const idx = repairs.findIndex(r=>r.id===id);
+  if(idx<0) return;
+  const refId = repairs[idx].refId;
+  repairs[idx].status = newStatus;
+  repairs[idx].updatedAt = new Date().toLocaleDateString('th-TH');
+  saveRepairs(); renderRepairs(); renderMachines();
+  toast(newStatus==='done'?'✅ ปิดงานซ่อมแล้ว':'🔧 อัปเดตสถานะแล้ว');
+
+  // อัปเดตกลับไป Sheets ทันที
+  if(refId){
+    try{
+      const params = new URLSearchParams({
+        action: 'updateRepair',
+        refId: refId,
+        status: newStatus
+      });
+      await fetch(SCRIPT_URL + '?' + params.toString(), {
+        method: 'GET', mode: 'no-cors', cache: 'no-cache'
+      });
+    }catch{}
+  }
+}
+
+function renderRepairs(){
+  const sf = document.getElementById('rep-filter')?.value || '';
+  const pf = document.getElementById('rep-prio-filter')?.value || '';
+  // ซ่อนรายการ done โดย default ยกเว้นเลือก filter "ซ่อมแล้ว"
+  let list = sf === 'done' ? repairs : repairs.filter(r=>r.status!=='done');
+  if(sf && sf !== 'done') list = list.filter(r=>r.status===sf);
+  if(pf) list = list.filter(r=>r.prio===pf);
+
+  const total = repairs.length;
+  const open  = repairs.filter(r=>r.status==='open'||r.status==='inprogress').length;
+  const done  = repairs.filter(r=>r.status==='done').length;
+  const inprog = repairs.filter(r=>r.status==='inprogress').length;
+  const openOnly = repairs.filter(r=>r.status==='open').length;
+  document.getElementById('rep-open').textContent   = openOnly;
+  document.getElementById('rep-inprog').textContent = inprog;
+  document.getElementById('rep-done').textContent   = done;
+
+  const el = document.getElementById('repair-list');
+  if(!list.length){
+    if(repairs.filter(r=>r.status!=='done').length === 0){
+      el.innerHTML='<div class="empty" style="padding:30px 20px;"><div style="font-size:32px;margin-bottom:8px;">✅</div><div style="color:var(--accent);font-weight:500;">ไม่มีงานค้างซ่อม</div></div>';
+    } else {
+      el.innerHTML='<div class="empty">ไม่พบรายการตามที่กรอง</div>';
+    }
+    return;
+  }
+
+  const prioIcon = {low:'🟢', mid:'🟡', high:'🔴'};
+  const prioText = {low:'ต่ำ', mid:'กลาง', high:'สูง'};
+  const stIcon   = {open:'🔴 รอดำเนินการ', inprogress:'🔧 กำลังซ่อม', done:'✅ ซ่อมแล้ว'};
+  const stColor  = {open:'var(--danger)', inprogress:'var(--warn)', done:'var(--accent)'};
+
+  el.innerHTML = list.map(r=>`
+    <div class="rep-card">
+      <div class="rep-card-head">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${r.machineName}</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:2px;">${r.machineId} · แจ้งโดย: ${r.reporter} · ${r.createdAt}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;margin-left:10px;flex-shrink:0;">
+          <span style="font-size:11px;font-weight:600;color:${stColor[r.status]||'var(--text2)'};">${stIcon[r.status]||r.status}</span>
+          <span style="font-size:11px;color:var(--text2);">${prioIcon[r.prio]} ${prioText[r.prio]}</span>
+        </div>
+      </div>
+      <div style="font-size:13px;color:var(--text);background:var(--bg);border-radius:8px;padding:10px 12px;line-height:1.6;">${r.desc}</div>
+      ${r.status !== 'done' ? `
+      <div class="rep-actions">
+        ${r.status==='open'?`<button class="rep-btn" onclick="updateRepairStatus(${r.id},'inprogress')" style="background:rgba(251,191,36,.15);color:var(--warn);">🔧 รับงานซ่อม</button>`:''}
+        <button class="rep-btn" onclick="updateRepairStatus(${r.id},'done')" style="background:rgba(74,222,128,.15);color:var(--accent);">✅ ซ่อมเสร็จแล้ว</button>
+        <button class="rep-btn" onclick="deleteRepair(${r.id})" style="background:rgba(248,113,113,.1);color:var(--danger);">🗑 ลบ</button>
+      </div>` : `
+      <div style="margin-top:8px;font-size:11px;color:var(--accent);">✅ ปิดงาน ${r.updatedAt}</div>
+      <div class="rep-actions">
+        <button class="rep-btn" onclick="deleteRepair(${r.id})" style="background:rgba(255,255,255,.06);color:var(--text2);">🗑 ลบ</button>
+      </div>`}
+    </div>`).join('');
+}
+
+async function deleteRepair(id){
+  if(!confirm('ซ่อนรายการนี้?')) return;
+  const rep = repairs.find(r=>r.id===id);
+  // ซ่อนใน app — เปลี่ยนสถานะเป็น deleted
+  repairs = repairs.filter(r=>r.id!==id);
+  saveRepairs(); renderRepairs(); renderMachines();
+
+  // อัปเดตสถานะใน Sheets เป็น deleted (ข้อมูลยังอยู่)
+  if(rep?.refId){
+    try{
+      const params = new URLSearchParams({
+        action: 'updateRepair',
+        refId: rep.refId,
+        status: 'deleted'
+      });
+      await fetch(SCRIPT_URL + '?' + params.toString(), {
+        method: 'GET', mode: 'no-cors', cache: 'no-cache'
+      });
+    }catch{}
+  }
+}
+
+
+
+
+function debugStatus(){
+  const el = document.getElementById('debug-output');
+  el.style.display = 'block';
+  const syncedAt = document.getElementById('sync-status')?.textContent || '-';
+
+  let html = '';
+  html += `<div style="color:#60a5fa;">📡 สถานะซิงค์: ${syncedAt}</div>`;
+  html += `<div>🏭 เครื่องจักร: ${machines.length} เครื่อง</div>`;
+  html += `<div>🔧 แจ้งซ่อม: ${repairs.length} รายการ</div>`;
+
+  if(repairs.length > 0){
+    html += `<div style="color:#4ade80;margin-top:4px;">repairs ที่โหลดได้:</div>`;
+    repairs.forEach((r,i)=>{
+      html += `<div style="padding-left:8px;">${i+1}. ${r.machineName} | ${r.prio} | ${r.status}</div>`;
+    });
+  } else {
+    html += `<div style="color:#f87171;margin-top:4px;">⚠️ repairs ว่างเปล่า — กด ↻ รีเฟรชก่อน</div>`;
+  }
+
+  // ลอง fetch ตรงๆ
+  html += `<div style="margin-top:6px;color:#fbbf24;">กำลัง fetch จาก Sheets...</div>`;
+  el.innerHTML = html;
+
+  fetch(SCRIPT_URL + '?t=' + Date.now(), {cache:'no-cache'})
+    .then(r => r.text())
+    .then(text => {
+      try {
+        const json = JSON.parse(text);
+        let h = el.innerHTML.replace('กำลัง fetch จาก Sheets...', '');
+        h += `<div style="color:#4ade80;">✅ fetch สำเร็จ</div>`;
+        h += `<div>machines: ${json.machines?.length||0} | repairs: ${json.repairs?.length||0}</div>`;
+        if(json.repairs?.length > 0){
+          h += `<div style="color:#4ade80;">repair แรก: ${json.repairs[0].machineName} | ${json.repairs[0].status}</div>`;
+          // อัปเดตข้อมูลทันที
+          repairs = json.repairs;
+          localStorage.setItem('pm_repairs', JSON.stringify(repairs));
+          renderMachines();
+          h += `<div style="color:#4ade80;">✅ อัปเดต UI แล้ว!</div>`;
+        } else {
+          h += `<div style="color:#f87171;">repairs ว่างเปล่าจาก Sheets</div>`;
+        }
+        el.innerHTML = h;
+      } catch(e){
+        el.innerHTML += `<div style="color:#f87171;">❌ parse error: ${e.message}</div><div>${text.slice(0,200)}</div>`;
+      }
+    })
+    .catch(err => {
+      el.innerHTML += `<div style="color:#f87171;">❌ fetch error: ${err.message}</div>`;
+    });
+}
+
+function scrollToAlert(){
+  const el = document.getElementById('alert-machines');
+  if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// ── QR แจ้งซ่อม ──
+function getRepairFormUrl(m){
+  const base = document.getElementById('repair-url-base')?.value.trim() || 'repair-form.html';
+  return base + '?id=' + encodeURIComponent(m.id) + '&name=' + encodeURIComponent(m.name) + (m.zone?'&zone='+encodeURIComponent(m.zone):'');
+}
+
+function showQRPrintModal(){
+  document.getElementById('qr-print-modal').classList.add('open');
+  filterQRList();
+}
+
+function filterQRList(){
+  const s = (document.getElementById('qr-search-print')?.value||'').toLowerCase();
+  const list = machines.filter(m=>!s||m.name.toLowerCase().includes(s)||m.id.toLowerCase().includes(s));
+  const el = document.getElementById('qr-machine-list');
+  el.innerHTML = list.map(m=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);">
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${m.name}</div>
+        <div style="font-size:11px;color:var(--text2);">${m.id}</div>
+      </div>
+      <button onclick="printOneQR('${m.id}')" style="background:rgba(248,113,113,.15);border:1px solid rgba(248,113,113,.3);color:var(--danger);padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer;font-family:var(--font);white-space:nowrap;">🖨 พิมพ์</button>
+    </div>`).join('');
+}
+
+function printOneQR(machineId){
+  const m = machines.find(x=>x.id===machineId);
+  if(!m) return;
+  const url = getRepairFormUrl(m);
+  const w = window.open('','_blank');
+  w.document.write(buildQRPrintPage([m], [url]));
+  w.document.close();
+  setTimeout(()=>w.print(), 800);
+}
+
+function printAllQR(){
+  const s = (document.getElementById('qr-search-print')?.value||'').toLowerCase();
+  const list = machines.filter(m=>!s||m.name.toLowerCase().includes(s)||m.id.toLowerCase().includes(s));
+  if(!list.length){ toast('ไม่มีเครื่องจักร'); return; }
+  const urls = list.map(m=>getRepairFormUrl(m));
+  const w = window.open('','_blank');
+  w.document.write(buildQRPrintPage(list, urls));
+  w.document.close();
+  setTimeout(()=>w.print(), 1200);
+}
+
+function buildQRPrintPage(machines, urls){
+  const items = machines.map((m,i)=>`
+    <div style="break-inside:avoid;text-align:center;padding:16px;border:2px solid #eee;border-radius:12px;width:180px;">
+      <div id="qr_${m.id.replace(/[^a-zA-Z0-9]/g,'_')}"></div>
+      <div style="font-size:11px;font-weight:700;margin-top:8px;color:#111;">${m.name}</div>
+      <div style="font-size:10px;color:#666;margin-top:2px;">${m.id}</div>
+      <div style="font-size:9px;color:#f87171;margin-top:4px;font-weight:600;">🔧 สแกนเพื่อแจ้งซ่อม</div>
+    </div>`).join('');
+
+  const scripts = machines.map((m,i)=>`
+    new QRCode(document.getElementById('qr_${m.id.replace(/[^a-zA-Z0-9]/g,'_')}'),{
+      text:'${urls[i].replace(/'/g,"\'")}',
+      width:140,height:140,colorDark:'#000',colorLight:'#fff',
+      correctLevel:QRCode.CorrectLevel.M
+    });`).join('');
+
+  return `<!DOCTYPE html><html><head><meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script>
+    <style>body{font-family:sans-serif;padding:20px;} .grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:flex-start;}
+    @media print{@page{margin:10mm;} button{display:none;}}</style></head>
+    <body><div class="grid">${items}</div>
+    <script>window.onload=function(){${scripts}};<\/script></body></html>`;
+}
+
+// ── Auto-load & Real-time refresh ──
+let refreshTimer = null;
+let isLoading = false;
+
+async function autoLoad(){
+  if(isLoading) return;
+  isLoading = true;
+  try{
+    const res  = await fetch(SCRIPT_URL + '?t=' + Date.now(), {cache:'no-cache'});
+    const text = await res.text();
+    const json = JSON.parse(text);
+
+    // อัปเดตเครื่องจักร
+    if(json.machines && json.machines.length){
+      machines = json.machines;
+      localStorage.setItem('pm_m', JSON.stringify(machines));
+      const sel = document.getElementById('f-machine');
+      if(sel && sel.options.length !== machines.length)
+        sel.innerHTML = machines.map(m=>`<option value="${m.id}">${m.name} (${m.id})</option>`).join('');
+      const hf = document.getElementById('h-mf');
+      if(hf) hf.innerHTML = '<option value="">เครื่องทั้งหมด</option>' + machines.map(m=>`<option value="${m.id}">${m.name}</option>`).join('');
+    }
+
+    // อัปเดต repairs จาก Sheets (Sheets เป็น source of truth)
+    if(json.repairs !== undefined){
+      repairs = json.repairs;
+      localStorage.setItem('pm_repairs', JSON.stringify(repairs));
+    }
+    if(json.allRepairs !== undefined){
+      repairs = json.allRepairs;
+      localStorage.setItem('pm_repairs', JSON.stringify(repairs));
+    }
+
+    // อัปเดต UI
+    const activePage = document.querySelector('.page.active')?.id;
+    if(activePage === 'page-machines') renderMachines();
+    if(activePage === 'page-plan')     renderPlan();
+    if(activePage === 'page-repair')   renderRepairs();
+
+    updateStatusBar('✅ ซิงค์แล้ว ' + new Date().toLocaleTimeString('th-TH', {hour:'2-digit',minute:'2-digit'}));
+  } catch(err){
+    updateStatusBar('⚠️ ไม่มีการเชื่อมต่อ — ใช้ข้อมูล Local');
+  }
+  isLoading = false;
+}
+
+function updateStatusBar(msg){
+  const el = document.getElementById('sync-status');
+  if(el){ el.textContent = msg; }
+}
+
+function startAutoRefresh(){
+  autoLoad(); // โหลดทันทีที่เปิดแอป
+  refreshTimer = setInterval(autoLoad, 30000); // refresh ทุก 30 วินาที
+}
+
+function stopAutoRefresh(){
+  if(refreshTimer){ clearInterval(refreshTimer); refreshTimer = null; }
+}
+
+// หยุด refresh เมื่อ tab ไม่ active (ประหยัดแบต)
+document.addEventListener('visibilitychange', () => {
+  if(document.hidden) stopAutoRefresh();
+  else startAutoRefresh();
+});
+
+// Init — ล้าง repairs local เพื่อให้ดึงจาก Sheets ใหม่
+localStorage.removeItem('pm_repairs');
+repairs = [];
+renderMachines();
+initForm();
+startAutoRefresh();
+
+</script>
+</body>
+</html>
