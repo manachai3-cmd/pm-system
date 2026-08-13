@@ -160,7 +160,8 @@ textarea{min-height:100px;resize:vertical;}
 <div class="toast" id="toast"></div>
 
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwQg_mH3WXc35KC2ukOyrTo8viSZ4t1iXeyiVWMkYN-TjQVkLwzNcqHVYk-6o7nFB_4/exec';
+// เปลี่ยน URL ตรงนี้เป็น Web App URL ตัวล่าสุดของคุณเรียบร้อยครับ
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwQeQ9wj_JwQlhPSDcjIEoexupN-FEjprD3RB6enFDKM6PblLRNuTLEhdgO0qPtLxXkVg/exec';
 
 // อ่าน URL parameters
 const params = new URLSearchParams(window.location.search);
@@ -177,7 +178,6 @@ function initPage(){
     const idEl = document.getElementById('hdr-id');
     idEl.textContent = machineId + (machineZone ? ' · ' + machineZone : '');
     idEl.style.display = 'block';
-    // ซ่อนช่องกรอกเครื่องจักรเพราะมีจาก QR แล้ว
     const machineInput = document.getElementById('machine-input-section');
     if(machineInput) machineInput.style.display = 'none';
   } else if(machineId) {
@@ -191,7 +191,7 @@ async function loadMachineInfo(){
   document.getElementById('loading-screen').style.display='block';
   document.getElementById('form-screen').style.display='none';
   try{
-    const res  = await fetch(SCRIPT_URL + '?t=' + Date.now(), {cache:'no-cache'});
+    const res  = await fetch(SCRIPT_URL + '?action=getData&t=' + Date.now(), {cache:'no-cache'});
     const json = await res.json();
     const m    = (json.machines||[]).find(x=>x.id===machineId);
     if(m){
@@ -232,7 +232,6 @@ async function submitRepair(){
   const desc     = document.getElementById('desc').value.trim();
   const loc      = document.getElementById('location').value.trim();
 
-  // ถ้าไม่มี machineId จาก QR ให้อ่านจากช่องกรอก
   const machineInputEl = document.getElementById('machine-input');
   if(machineInputEl && machineInputEl.style.display !== 'none' && !machineId){
     const inputVal = machineInputEl.value.trim();
@@ -251,20 +250,20 @@ async function submitRepair(){
   const now   = new Date();
   const payload = {
     type:        'repair',
-    refId,
-    machineId,
-    machineName,
+    refId:       refId,
+    machineId:   machineId,
+    machineName: machineName || machineId,
     reporter:    reporter + (dept?' ('+dept+')':''),
     desc:        desc + (loc?'\nตำแหน่ง: '+loc:''),
-    prio,
-    repairType,
+    prio:        prio,
+    repairType:  repairType,
     status:      'open',
     createdAt:   now.toLocaleDateString('th-TH'),
     updatedAt:   ''
   };
 
   try{
-    // ส่งผ่าน GET parameter เพื่อหลีกเลี่ยง CORS
+    // ปรับการส่งเข้า Apps Script ดักจับส่งพารามิเตอร์ action=repair
     const params = new URLSearchParams({
       action: 'repair',
       data: JSON.stringify(payload)
@@ -274,7 +273,8 @@ async function submitRepair(){
       mode: 'no-cors',
       cache: 'no-cache'
     });
-    // แสดงหน้า success
+    
+    // แสดงหน้าจอสำเร็จ
     document.getElementById('repair-ref').textContent    = 'เลขที่แจ้งซ่อม: ' + refId;
     document.getElementById('success-machine').textContent = machineName || machineId || '-';
     document.getElementById('form-screen').style.display    = 'none';
