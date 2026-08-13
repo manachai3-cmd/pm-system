@@ -6,51 +6,121 @@
 <title>ใบแจ้งซ่อม</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0f1117;--bg2:#161b27;--bg3:#1e2535;--border:rgba(255,255,255,0.1);--text:#e8eaf0;--text2:#8b91a8;--accent:#4ade80;--warn:#fbbf24;--danger:#f87171;--font:'IBM Plex Sans Thai',sans-serif;--r:12px;}
+:root {
+  --bg: #f0f7f4;            
+  --bg2: #ffffff;           
+  --bg3: #e2f1e8;           
+  --border: #d1e7dd;        
+  --border2: #b8dbcbe0;
+  --text: #1b382b;          
+  --text2: #517264;         
+  --accent: #10b981;        
+  --accent-hover: #059669;
+  --danger: #ef4444;        
+  --font: 'IBM Plex Sans Thai', sans-serif;
+  --r: 12px;
+}
+
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:30px;}
-.header{background:var(--bg2);border-bottom:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10;}
-.header-icon{width:40px;height:40px;border-radius:10px;background:rgba(248,113,113,.15);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:30px;-webkit-font-smoothing:antialiased;}
+
+/* Header */
+.header{background:var(--bg2);border-bottom:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,0.03);}
+.header-icon{width:42px;height:42px;border-radius:12px;background:rgba(239,68,68,0.1);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
 .header-info{flex:1;}
-.machine-name{font-size:16px;font-weight:600;line-height:1.2;}
-.machine-id{font-size:12px;color:var(--text2);margin-top:2px;}
+.machine-name{font-size:17px;font-weight:600;line-height:1.2;color:var(--text);}
+.machine-id{font-size:12px;color:var(--text2);margin-top:2px;font-weight:500;}
+
 .main{padding:16px 20px;max-width:480px;margin:0 auto;}
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:14px;}
-.card-title{font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--text2);text-transform:uppercase;margin-bottom:12px;}
-label{display:block;font-size:13px;color:var(--text2);margin:10px 0 5px;}
-input,textarea,select{width:100%;background:var(--bg);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 14px;font-size:15px;color:var(--text);font-family:var(--font);outline:none;transition:border-color .15s;-webkit-appearance:none;}
-input:focus,textarea:focus,select:focus{border-color:rgba(248,113,113,.5);}
+
+/* Cards */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;margin-bottom:14px;box-shadow:0 4px 12px rgba(16,185,129,0.04);position:relative;}
+.card-title{font-size:12px;font-weight:600;letter-spacing:.05em;color:var(--accent-hover);text-transform:uppercase;margin-bottom:12px;}
+
+label{display:block;font-size:13px;font-weight:500;color:var(--text);margin:12px 0 5px;}
+input,textarea,select{width:100%;background:#f9fdfa;border:1px solid var(--border2);border-radius:10px;padding:11px 14px;font-size:15px;color:var(--text);font-family:var(--font);outline:none;transition:all .15s;-webkit-appearance:none;}
+input:focus,textarea:focus,select:focus{border-color:var(--accent);background:#ffffff;box-shadow:0 0 0 3px rgba(16,185,129,0.15);}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23517264' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;}
 textarea{min-height:100px;resize:vertical;}
+input::placeholder, textarea::placeholder{color:#a0b8ac;}
+
+/* Dropdown สไตล์ค้นหา */
+.search-results {
+  position: absolute;
+  top: calc(100% - 10px);
+  left: 20px;
+  right: 20px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 100;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+  display: none;
+}
+.search-item {
+  padding: 10px 14px;
+  border-bottom: 1px solid #f0f7f4;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.search-item:last-child { border-bottom: none; }
+.search-item:hover { background: var(--bg3); }
+.search-item .mc-id { font-weight: 600; font-size: 13px; color: var(--accent-hover); }
+.search-item .mc-name { font-size: 12px; color: var(--text); margin-top: 2px; }
+
+/* การ์ดแสดงผลเมื่อเลือกเสร็จ */
+.selected-card {
+  display: none;
+  background: var(--bg3);
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-top: 10px;
+}
+.selected-card .sc-title { font-size: 11px; font-weight: 600; color: var(--accent-hover); text-transform: uppercase; }
+.selected-card .sc-id { font-weight: 700; font-size: 14px; color: var(--text); margin-top: 2px; }
+.selected-card .sc-name { font-size: 13px; color: var(--text2); margin-top: 2px; }
+
+/* Type Options */
+.type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+.type-opt{border:1px solid var(--border);border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer;background:#f9fdfa;transition:all .15s;color:var(--text2);}
+.type-opt:hover{border-color:var(--accent);color:var(--text);}
+.type-opt .t-icon{font-size:22px;margin-bottom:5px;}
+.type-opt .t-label{font-size:13px;font-weight:500;}
+.type-opt.selected{border-color:var(--accent);background:var(--bg3);color:var(--accent-hover);font-weight:600;}
+
+/* Priority Options */
 .prio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px;}
-.prio-opt{border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer;background:var(--bg);transition:all .15s;}
+.prio-opt{border:1px solid var(--border);border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer;background:#f9fdfa;transition:all .15s;}
 .prio-opt .emoji{font-size:22px;margin-bottom:5px;}
-.prio-opt .label{font-size:12px;font-weight:600;}
+.prio-opt .label{font-size:12px;font-weight:600;color:var(--text2);}
 .prio-opt .sub{font-size:10px;color:var(--text2);margin-top:2px;line-height:1.3;}
-.prio-low.active{border-color:#4ade80;background:rgba(74,222,128,.1);color:#4ade80;}
-.prio-mid.active{border-color:#fbbf24;background:rgba(251,191,36,.1);color:#fbbf24;}
-.prio-high.active{border-color:#f87171;background:rgba(248,113,113,.1);color:#f87171;}
-.prio-opt.active .sub{color:currentColor;opacity:.7;}
-.submit-btn{width:100%;background:var(--danger);color:white;border:none;border-radius:var(--r);padding:15px;font-size:16px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
-.submit-btn:hover{opacity:.9;}
+.prio-low.active{border-color:#10b981;background:rgba(16,185,129,0.12);.label{color:#059669;}}
+.prio-mid.active{border-color:#f59e0b;background:rgba(245,158,11,0.12);.label{color:#d97706;}}
+.prio-high.active{border-color:#ef4444;background:rgba(239,68,68,0.12);.label{color:#dc2626;}}
+.prio-opt.active .sub{color:currentColor;opacity:.8;}
+
+/* Submit Button */
+.submit-btn{width:100%;background:var(--accent);color:white;border:none;border-radius:var(--r);padding:15px;font-size:16px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 12px rgba(16,185,129,0.25);}
+.submit-btn:hover{background:var(--accent-hover);}
 .submit-btn:disabled{opacity:.5;cursor:not-allowed;}
+
 /* Success screen */
 .success{display:none;text-align:center;padding:40px 20px;}
 .success-icon{font-size:60px;margin-bottom:16px;}
-.success-title{font-size:20px;font-weight:600;margin-bottom:8px;}
+.success-title{font-size:22px;font-weight:600;color:var(--text);margin-bottom:8px;}
 .success-sub{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:24px;}
-.success-id{font-family:monospace;font-size:13px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;display:inline-block;color:var(--text2);margin-bottom:20px;}
-.back-btn{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px 24px;font-size:14px;cursor:pointer;color:var(--text);font-family:var(--font);}
+.success-id{font-family:monospace;font-size:14px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 16px;display:inline-block;color:var(--accent-hover);font-weight:600;margin-bottom:20px;}
+.back-btn{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px 24px;font-size:14px;font-weight:500;cursor:pointer;color:var(--text);font-family:var(--font);}
+
 /* Loading */
 .loading{display:none;text-align:center;padding:60px 20px;}
-.spinner{width:40px;height:40px;border:3px solid rgba(255,255,255,.1);border-top-color:var(--danger);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px;}
+.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px;}
 @keyframes spin{to{transform:rotate(360deg)}}
-.type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px;}
-.type-opt{border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer;background:var(--bg);transition:all .15s;color:var(--text2);}
-.type-opt:hover{border-color:rgba(255,255,255,.25);color:var(--text);}
-.type-opt .t-icon{font-size:22px;margin-bottom:5px;}
-.type-opt .t-label{font-size:13px;font-weight:500;}
-.type-opt.selected{border-color:#60a5fa;background:rgba(96,165,250,.12);color:#60a5fa;}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 20px;font-size:13px;z-index:999;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:#ffffff;border-radius:10px;padding:12px 20px;font-size:13px;z-index:999;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,0.15);}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
@@ -68,23 +138,17 @@ textarea{min-height:100px;resize:vertical;}
 <!-- Loading -->
 <div class="loading" id="loading-screen">
   <div class="spinner"></div>
-  <div style="font-size:14px;color:var(--text2);">กำลังโหลดข้อมูลเครื่องจักร...</div>
+  <div style="font-size:14px;color:var(--text2);">กำลังโหลดข้อมูลในระบบ...</div>
 </div>
 
 <!-- Form -->
 <div id="form-screen">
   <div class="main">
+    <!-- การ์ดรวม ประเภทงาน + ช่องค้นหา -->
     <div class="card" id="machine-input-section">
-      <div class="card-title">เครื่องจักร</div>
-      <label>หมายเลขเครื่องจักร *</label>
-      <input id="machine-input" placeholder="เช่น AS-MC-001, HW-MC-005" type="text"
-        style="font-family:var(--mono);"
-        oninput="onMachineInput(this.value)">
-      <div id="machine-input-hint" style="font-size:12px;color:var(--text2);margin-top:5px;">กรอกรหัสเครื่องจักรที่ต้องการแจ้งซ่อม</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">ประเภทงาน *</div>
+      <div class="card-title">ประเภทงาน & รายการที่ต้องการแจ้งซ่อม *</div>
+      
+      <!-- ปุ่มเลือกประเภทงาน (อยู่บนสุดของการ์ด) -->
       <div class="type-grid">
         <div class="type-opt selected" id="t-machine" onclick="setType('machine')">
           <div class="t-icon">⚙️</div>
@@ -99,20 +163,42 @@ textarea{min-height:100px;resize:vertical;}
           <div class="t-label">สาธารณูปโภค</div>
         </div>
       </div>
+
+      <label id="search-label">ค้นหาหมายเลขเครื่องจักร (MC) *</label>
+      <input id="machine-input" placeholder="พิมพ์หมายเลขเครื่องจักร MC..." type="text"
+        autocomplete="off"
+        oninput="onMachineSearch(this.value)">
+      
+      <!-- รายการค้นหาที่เด้งขึ้นมา -->
+      <div class="search-results" id="search-results"></div>
+
+      <!-- การ์ดแสดงข้อมูลหลังจากเลือกรายการเสร็จ -->
+      <div class="selected-card" id="selected-card">
+        <div class="sc-title">✓ รายการที่เลือก</div>
+        <div class="sc-id" id="sc-id"></div>
+        <div class="sc-name" id="sc-name"></div>
+      </div>
+
+      <div id="machine-input-hint" style="font-size:12px;color:var(--text2);margin-top:6px;">⚠️ ต้องกดเลือกจากรายการในระบบเท่านั้น</div>
     </div>
 
     <div class="card">
       <div class="card-title">ข้อมูลผู้แจ้ง</div>
       <label>ชื่อผู้แจ้ง *</label>
       <input id="reporter" placeholder="กรอกชื่อของคุณ" type="text">
-      <label>แผนก / ฝ่าย</label>
-      <input id="department" placeholder="เช่น ฝ่ายผลิต, ฝ่ายซ่อมบำรุง, ฝ่าย QC">
+      
+      <label>แผนก / ฝ่าย *</label>
+      <select id="department">
+        <option value="ฝ่ายผลิต">ฝ่ายผลิต</option>
+        <option value="ฝ่ายQC">ฝ่ายQC</option>
+        <option value="ฝ่าย OFFICE">ฝ่าย OFFICE</option>
+      </select>
     </div>
 
     <div class="card">
       <div class="card-title">รายละเอียดปัญหา</div>
       <label>อาการเสีย / ปัญหาที่พบ *</label>
-      <textarea id="desc" placeholder="อธิบายอาการเสียหรือปัญหาให้ละเอียดที่สุด เช่น เสียงดังผิดปกติ น้ำมันรั่ว ไม่สามารถสตาร์ทได้..."></textarea>
+      <textarea id="desc" placeholder="อธิบายอาการเสียหรือปัญหาให้ละเอียดที่สุด..."></textarea>
       <label>ตำแหน่งที่เสีย</label>
       <input id="location" placeholder="เช่น มอเตอร์ด้านซ้าย, ปั๊มน้ำมัน">
     </div>
@@ -151,8 +237,8 @@ textarea{min-height:100px;resize:vertical;}
   <div class="success-sub">ระบบได้รับข้อมูลการแจ้งซ่อมแล้ว<br>ทีมช่างจะดำเนินการโดยเร็วที่สุด</div>
   <div class="success-id" id="repair-ref"></div>
   <div style="margin-bottom:20px;">
-    <div style="font-size:13px;color:var(--text2);margin-bottom:6px;">เครื่องที่แจ้ง:</div>
-    <div style="font-size:15px;font-weight:500;" id="success-machine"></div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:6px;">รายการที่แจ้ง:</div>
+    <div style="font-size:16px;font-weight:600;color:var(--text);" id="success-machine"></div>
   </div>
   <button class="back-btn" onclick="resetForm()">🔧 แจ้งซ่อมอีกครั้ง</button>
 </div>
@@ -160,20 +246,32 @@ textarea{min-height:100px;resize:vertical;}
 <div class="toast" id="toast"></div>
 
 <script>
-// เปลี่ยน URL ตรงนี้เป็น Web App URL ตัวล่าสุดของคุณเรียบร้อยครับ
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwQeQ9wj_JwQlhPSDcjIEoexupN-FEjprD3RB6enFDKM6PblLRNuTLEhdgO0qPtLxXkVg/exec';
 
-// อ่าน URL parameters
 const params = new URLSearchParams(window.location.search);
 let machineId   = params.get('id')   || '';
 let machineName = params.get('name') || '';
 let machineZone = params.get('zone') || '';
 let prio = 'mid';
 let repairType = 'machine';
+let machineList = []; 
+let isSelectedFromList = false;
 
-// แสดงข้อมูลเครื่อง
+// ดึงข้อมูลเครื่องจักรจาก Google Sheets
+async function fetchAllMachines(){
+  try{
+    const res  = await fetch(SCRIPT_URL + '?action=getData&t=' + Date.now(), {cache:'no-cache'});
+    const json = await res.json();
+    if(json.machines && json.machines.length){
+      machineList = json.machines;
+    }
+  }catch(e){}
+}
+
 function initPage(){
+  fetchAllMachines();
   if(machineName){
+    isSelectedFromList = true;
     document.getElementById('hdr-name').textContent = machineName;
     const idEl = document.getElementById('hdr-id');
     idEl.textContent = machineId + (machineZone ? ' · ' + machineZone : '');
@@ -193,8 +291,10 @@ async function loadMachineInfo(){
   try{
     const res  = await fetch(SCRIPT_URL + '?action=getData&t=' + Date.now(), {cache:'no-cache'});
     const json = await res.json();
-    const m    = (json.machines||[]).find(x=>x.id===machineId);
+    machineList = json.machines || [];
+    const m = machineList.find(x => String(x.id).toUpperCase() === String(machineId).toUpperCase());
     if(m){
+      isSelectedFromList = true;
       machineName = m.name;
       machineZone = m.zone;
       document.getElementById('hdr-name').textContent = m.name;
@@ -205,12 +305,115 @@ async function loadMachineInfo(){
   document.getElementById('form-screen').style.display='block';
 }
 
+// ฟังก์ชันสลับประเภทงาน (กรองรหัส MC / TC / UT)
 function setType(t){
   repairType = t;
   ['machine','mold','utility'].forEach(v=>{
     document.getElementById('t-'+v).className = 'type-opt' + (v===t?' selected':'');
   });
+
+  // เปลี่ยน Label & Placeholder
+  const lbl = document.getElementById('search-label');
+  const input = document.getElementById('machine-input');
+  
+  if(t === 'machine'){
+    lbl.textContent = 'ค้นหาหมายเลขเครื่องจักร (MC) *';
+    input.placeholder = 'พิมพ์หมายเลขเครื่องจักร MC...';
+  } else if(t === 'mold'){
+    lbl.textContent = 'ค้นหาหมายเลขแม่พิมพ์ (TC) *';
+    input.placeholder = 'พิมพ์หมายเลขแม่พิมพ์ TC...';
+  } else if(t === 'utility'){
+    lbl.textContent = 'ค้นหาหมายเลขสาธารณูปโภค (UT) *';
+    input.placeholder = 'พิมพ์หมายเลขสาธารณูปโภค UT...';
+  }
+
+  // รีเซ็ตการค้นหาเดิมเมื่อสลับประเภท
+  input.value = '';
+  document.getElementById('selected-card').style.display = 'none';
+  document.getElementById('search-results').style.display = 'none';
+  isSelectedFromList = false;
+  machineId = '';
+  machineName = '';
 }
+
+// ค้นหาและกรองรหัสเฉพาะ MC / TC / UT
+function onMachineSearch(val){
+  const resDiv   = document.getElementById('search-results');
+  const cardDiv  = document.getElementById('selected-card');
+  const hint     = document.getElementById('machine-input-hint');
+  const keyword  = val.trim().toLowerCase();
+
+  isSelectedFromList = false;
+  machineId = ''; 
+  machineName = '';
+  cardDiv.style.display = 'none';
+
+  if(!keyword){
+    resDiv.style.display = 'none';
+    hint.textContent = '⚠️ ต้องเลือกรายการจากตัวเลือกในระบบเท่านั้น';
+    hint.style.color = 'var(--text2)';
+    return;
+  }
+
+  // 1. กรองประเภทงานก่อน (MC / TC / UT)
+  let typeFiltered = machineList;
+  if(repairType === 'machine'){
+    typeFiltered = machineList.filter(m => String(m.id || '').toUpperCase().includes('MC'));
+  } else if(repairType === 'mold'){
+    typeFiltered = machineList.filter(m => String(m.id || '').toUpperCase().includes('TC') || String(m.id || '').toUpperCase().includes('TL'));
+  } else if(repairType === 'utility'){
+    typeFiltered = machineList.filter(m => String(m.id || '').toUpperCase().includes('UT'));
+  }
+
+  // 2. ค้นหาเปรียบเทียบคำจาก ID หรือ Name
+  const matched = typeFiltered.filter(m => 
+    String(m.id || '').toLowerCase().includes(keyword) || 
+    String(m.name || '').toLowerCase().includes(keyword)
+  );
+
+  if(!matched.length){
+    resDiv.innerHTML = '<div class="search-item" style="color:#ef4444;font-size:13px;padding:12px;">❌ ไม่พบข้อมูลในหมวดนี้</div>';
+    resDiv.style.display = 'block';
+    hint.textContent = '❌ ไม่พบข้อมูลในตาราง Machines';
+    hint.style.color = 'var(--danger)';
+    return;
+  }
+
+  resDiv.innerHTML = matched.slice(0, 10).map(m => `
+    <div class="search-item" onclick="selectMachine('${String(m.id).replace(/'/g, "\\'")}', '${String(m.name).replace(/'/g, "\\'")}', '${String(m.zone||'').replace(/'/g, "\\'")}')">
+      <div class="mc-id">${m.id}</div>
+      <div class="mc-name">${m.name}</div>
+    </div>
+  `).join('');
+  resDiv.style.display = 'block';
+}
+
+// เมื่อผู้ใช้กดเลือก
+function selectMachine(id, name, zone){
+  machineId   = id;
+  machineName = name;
+  machineZone = zone;
+  isSelectedFromList = true;
+
+  document.getElementById('machine-input').value = id;
+  document.getElementById('search-results').style.display = 'none';
+
+  // แสดงการ์ดสรุปชื่อที่เลือก
+  document.getElementById('sc-id').textContent = id;
+  document.getElementById('sc-name').textContent = name;
+  document.getElementById('selected-card').style.display = 'block';
+
+  const hint = document.getElementById('machine-input-hint');
+  hint.textContent = '✅ ยืนยันข้อมูลเรียบร้อยแล้ว';
+  hint.style.color = 'var(--accent-hover)';
+}
+
+document.addEventListener('click', function(e){
+  const box = document.getElementById('machine-input-section');
+  if(box && !box.contains(e.target)){
+    document.getElementById('search-results').style.display = 'none';
+  }
+});
 
 function setPrio(p){
   prio = p;
@@ -227,18 +430,21 @@ function toast(msg, dur=2500){
 }
 
 async function submitRepair(){
+  const machineInputEl = document.getElementById('machine-input');
+  
+  if(machineInputEl && machineInputEl.style.display !== 'none'){
+    if(!isSelectedFromList || !machineId){
+      toast('🛑 ไม่อนุญาต! กรุณากดเลือกจากรายการค้นหา');
+      machineInputEl.focus();
+      return;
+    }
+  }
+
   const reporter = document.getElementById('reporter').value.trim();
-  const dept     = document.getElementById('department').value.trim();
+  const dept     = document.getElementById('department').value;
   const desc     = document.getElementById('desc').value.trim();
   const loc      = document.getElementById('location').value.trim();
 
-  const machineInputEl = document.getElementById('machine-input');
-  if(machineInputEl && machineInputEl.style.display !== 'none' && !machineId){
-    const inputVal = machineInputEl.value.trim();
-    if(!inputVal){ toast('⚠️ กรุณากรอกหมายเลขเครื่องจักร'); machineInputEl.focus(); return; }
-    machineId = inputVal.toUpperCase();
-    machineName = machineId;
-  }
   if(!reporter){ toast('⚠️ กรุณากรอกชื่อผู้แจ้ง'); document.getElementById('reporter').focus(); return; }
   if(!desc)    { toast('⚠️ กรุณาระบุอาการเสีย');    document.getElementById('desc').focus();     return; }
 
@@ -252,8 +458,8 @@ async function submitRepair(){
     type:        'repair',
     refId:       refId,
     machineId:   machineId,
-    machineName: machineName || machineId,
-    reporter:    reporter + (dept?' ('+dept+')':''),
+    machineName: machineName,
+    reporter:    reporter + ' (' + dept + ')',
     desc:        desc + (loc?'\nตำแหน่ง: '+loc:''),
     prio:        prio,
     repairType:  repairType,
@@ -263,7 +469,6 @@ async function submitRepair(){
   };
 
   try{
-    // ปรับการส่งเข้า Apps Script ดักจับส่งพารามิเตอร์ action=repair
     const params = new URLSearchParams({
       action: 'repair',
       data: JSON.stringify(payload)
@@ -274,9 +479,8 @@ async function submitRepair(){
       cache: 'no-cache'
     });
     
-    // แสดงหน้าจอสำเร็จ
     document.getElementById('repair-ref').textContent    = 'เลขที่แจ้งซ่อม: ' + refId;
-    document.getElementById('success-machine').textContent = machineName || machineId || '-';
+    document.getElementById('success-machine').textContent = `${machineId} - ${machineName}`;
     document.getElementById('form-screen').style.display    = 'none';
     document.getElementById('success-screen').style.display = 'block';
     window.scrollTo({top:0, behavior:'smooth'});
@@ -287,32 +491,18 @@ async function submitRepair(){
   }
 }
 
-function onMachineInput(val){
-  const hint = document.getElementById('machine-input-hint');
-  if(val.trim()){
-    machineId = val.trim().toUpperCase();
-    machineName = machineId;
-    hint.textContent = 'รหัส: ' + machineId;
-    hint.style.color = 'var(--accent)';
-  } else {
-    machineId = '';
-    machineName = '';
-    hint.textContent = 'กรอกรหัสเครื่องจักรที่ต้องการแจ้งซ่อม';
-    hint.style.color = 'var(--text2)';
-  }
-}
-
 function resetForm(){
   const mi = document.getElementById('machine-input');
   if(mi) mi.value = '';
+  document.getElementById('selected-card').style.display = 'none';
   const hint = document.getElementById('machine-input-hint');
-  if(hint){ hint.textContent='กรอกรหัสเครื่องจักรที่ต้องการแจ้งซ่อม'; hint.style.color='var(--text2)'; }
-  if(!params.get('id') && !params.get('name')){ machineId=''; machineName=''; }
+  if(hint){ hint.textContent='⚠️ ต้องเลือกรายการจากตัวเลือกในระบบเท่านั้น'; hint.style.color='var(--text2)'; }
+  if(!params.get('id') && !params.get('name')){ machineId=''; machineName=''; isSelectedFromList=false; }
   document.getElementById('reporter').value    = '';
-  document.getElementById('department').value  = '';
+  document.getElementById('department').selectedIndex = 0;
   document.getElementById('desc').value        = '';
   document.getElementById('location').value    = '';
-  repairType='machine'; setType('machine');
+  setType('machine');
   setPrio('mid');
   document.getElementById('success-screen').style.display = 'none';
   document.getElementById('form-screen').style.display    = 'block';
