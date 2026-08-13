@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ใบแจ้งซ่อม</title>
+<title>ใบแจ้งซ่อม - Dulhunty Power</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -25,11 +25,11 @@
 body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:30px;-webkit-font-smoothing:antialiased;}
 
 /* Header */
-.header{background:var(--bg2);border-bottom:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,0.03);}
+.header{background:var(--bg2);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,0.03);}
 .header-icon{width:42px;height:42px;border-radius:12px;background:rgba(239,68,68,0.1);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
 .header-info{flex:1;}
-.machine-name{font-size:17px;font-weight:600;line-height:1.2;color:var(--text);}
-.machine-id{font-size:12px;color:var(--text2);margin-top:2px;font-weight:500;}
+.machine-name{font-size:18px;font-weight:600;line-height:1.2;color:var(--text);}
+.company-name{font-size:12px;color:var(--text2);margin-top:2px;font-weight:500;}
 
 .main{padding:16px 20px;max-width:480px;margin:0 auto;}
 
@@ -116,7 +116,7 @@ input::placeholder, textarea::placeholder{color:#a0b8ac;}
 .back-btn{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px 24px;font-size:14px;font-weight:500;cursor:pointer;color:var(--text);font-family:var(--font);}
 
 /* Loading */
-.loading{display:none;text-align:center;padding:60px 20px;}
+.loading{display:block;text-align:center;padding:60px 20px;}
 .spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px;}
 @keyframes spin{to{transform:rotate(360deg)}}
 
@@ -126,29 +126,29 @@ input::placeholder, textarea::placeholder{color:#a0b8ac;}
 </head>
 <body>
 
-<!-- Header -->
+<!-- Header ข้อความล้วน คลีน สบายตา -->
 <div class="header">
   <div class="header-icon">🔧</div>
   <div class="header-info">
-    <div class="machine-name" id="hdr-name">กำลังโหลด...</div>
+    <div class="machine-name" id="hdr-name">ใบแจ้งซ่อม</div>
+    <div class="company-name">Dulhunty Power ( Thailand ) Co., Ltd.</div>
     <div class="machine-id" id="hdr-id" style="display:none;"></div>
   </div>
 </div>
 
-<!-- Loading -->
+<!-- Loading Screen -->
 <div class="loading" id="loading-screen">
   <div class="spinner"></div>
-  <div style="font-size:14px;color:var(--text2);">กำลังโหลดข้อมูลในระบบ...</div>
+  <div id="loading-msg" style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px;">กำลังโหลดระบบ...</div>
+  <div id="loading-sub" style="font-size:13px;color:var(--text2);">ดึงข้อมูลเครื่องจักรจาก Google Sheets</div>
 </div>
 
 <!-- Form -->
-<div id="form-screen">
+<div id="form-screen" style="display:none;">
   <div class="main">
-    <!-- การ์ดรวม ประเภทงาน + ช่องค้นหา -->
     <div class="card" id="machine-input-section">
       <div class="card-title">ประเภทงาน & รายการที่ต้องการแจ้งซ่อม *</div>
       
-      <!-- ปุ่มเลือกประเภทงาน (อยู่บนสุดของการ์ด) -->
       <div class="type-grid">
         <div class="type-opt selected" id="t-machine" onclick="setType('machine')">
           <div class="t-icon">⚙️</div>
@@ -169,10 +169,8 @@ input::placeholder, textarea::placeholder{color:#a0b8ac;}
         autocomplete="off"
         oninput="onMachineSearch(this.value)">
       
-      <!-- รายการค้นหาที่เด้งขึ้นมา -->
       <div class="search-results" id="search-results"></div>
 
-      <!-- การ์ดแสดงข้อมูลหลังจากเลือกรายการเสร็จ -->
       <div class="selected-card" id="selected-card">
         <div class="sc-title">✓ รายการที่เลือก</div>
         <div class="sc-id" id="sc-id"></div>
@@ -257,19 +255,18 @@ let repairType = 'machine';
 let machineList = []; 
 let isSelectedFromList = false;
 
-// ดึงข้อมูลเครื่องจักรจาก Google Sheets
-async function fetchAllMachines(){
+async function initPage(){
+  document.getElementById('loading-screen').style.display = 'block';
+  document.getElementById('form-screen').style.display    = 'none';
+
   try{
-    const res  = await fetch(SCRIPT_URL + '?action=getData&t=' + Date.now(), {cache:'no-cache'});
+    const res  = await fetch(SCRIPT_URL + '?action=getData&t=' + Date.now());
     const json = await res.json();
     if(json.machines && json.machines.length){
       machineList = json.machines;
     }
   }catch(e){}
-}
 
-function initPage(){
-  fetchAllMachines();
   if(machineName){
     isSelectedFromList = true;
     document.getElementById('hdr-name').textContent = machineName;
@@ -279,19 +276,6 @@ function initPage(){
     const machineInput = document.getElementById('machine-input-section');
     if(machineInput) machineInput.style.display = 'none';
   } else if(machineId) {
-    loadMachineInfo();
-  } else {
-    document.getElementById('hdr-name').textContent = 'ใบแจ้งซ่อม';
-  }
-}
-
-async function loadMachineInfo(){
-  document.getElementById('loading-screen').style.display='block';
-  document.getElementById('form-screen').style.display='none';
-  try{
-    const res  = await fetch(SCRIPT_URL + '?action=getData&t=' + Date.now(), {cache:'no-cache'});
-    const json = await res.json();
-    machineList = json.machines || [];
     const m = machineList.find(x => String(x.id).toUpperCase() === String(machineId).toUpperCase());
     if(m){
       isSelectedFromList = true;
@@ -300,19 +284,18 @@ async function loadMachineInfo(){
       document.getElementById('hdr-name').textContent = m.name;
       document.getElementById('hdr-id').textContent   = m.id + (m.zone?' · '+m.zone:'');
     }
-  }catch{}
-  document.getElementById('loading-screen').style.display='none';
-  document.getElementById('form-screen').style.display='block';
+  }
+
+  document.getElementById('loading-screen').style.display = 'none';
+  document.getElementById('form-screen').style.display    = 'block';
 }
 
-// ฟังก์ชันสลับประเภทงาน (กรองรหัส MC / TC / UT)
 function setType(t){
   repairType = t;
   ['machine','mold','utility'].forEach(v=>{
     document.getElementById('t-'+v).className = 'type-opt' + (v===t?' selected':'');
   });
 
-  // เปลี่ยน Label & Placeholder
   const lbl = document.getElementById('search-label');
   const input = document.getElementById('machine-input');
   
@@ -327,7 +310,6 @@ function setType(t){
     input.placeholder = 'พิมพ์หมายเลขสาธารณูปโภค UT...';
   }
 
-  // รีเซ็ตการค้นหาเดิมเมื่อสลับประเภท
   input.value = '';
   document.getElementById('selected-card').style.display = 'none';
   document.getElementById('search-results').style.display = 'none';
@@ -336,7 +318,6 @@ function setType(t){
   machineName = '';
 }
 
-// ค้นหาและกรองรหัสเฉพาะ MC / TC / UT
 function onMachineSearch(val){
   const resDiv   = document.getElementById('search-results');
   const cardDiv  = document.getElementById('selected-card');
@@ -355,7 +336,6 @@ function onMachineSearch(val){
     return;
   }
 
-  // 1. กรองประเภทงานก่อน (MC / TC / UT)
   let typeFiltered = machineList;
   if(repairType === 'machine'){
     typeFiltered = machineList.filter(m => String(m.id || '').toUpperCase().includes('MC'));
@@ -365,7 +345,6 @@ function onMachineSearch(val){
     typeFiltered = machineList.filter(m => String(m.id || '').toUpperCase().includes('UT'));
   }
 
-  // 2. ค้นหาเปรียบเทียบคำจาก ID หรือ Name
   const matched = typeFiltered.filter(m => 
     String(m.id || '').toLowerCase().includes(keyword) || 
     String(m.name || '').toLowerCase().includes(keyword)
@@ -388,7 +367,6 @@ function onMachineSearch(val){
   resDiv.style.display = 'block';
 }
 
-// เมื่อผู้ใช้กดเลือก
 function selectMachine(id, name, zone){
   machineId   = id;
   machineName = name;
@@ -398,7 +376,6 @@ function selectMachine(id, name, zone){
   document.getElementById('machine-input').value = id;
   document.getElementById('search-results').style.display = 'none';
 
-  // แสดงการ์ดสรุปชื่อที่เลือก
   document.getElementById('sc-id').textContent = id;
   document.getElementById('sc-name').textContent = name;
   document.getElementById('selected-card').style.display = 'block';
@@ -450,7 +427,7 @@ async function submitRepair(){
 
   const btn = document.getElementById('submit-btn');
   btn.disabled = true;
-  btn.innerHTML = '<div style="width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;"></div> กำลังส่ง...';
+  btn.innerHTML = '<div style="width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;"></div> กำลังบันทึกข้อมูล...';
 
   const refId = 'REP-' + Date.now().toString().slice(-6);
   const now   = new Date();
