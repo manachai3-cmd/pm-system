@@ -44,7 +44,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 textarea{min-height:100px;resize:vertical;}
 input::placeholder, textarea::placeholder{color:#a0b8ac;}
 
-/* Dropdown สไตล์ค้นหา */
+/* Dropdown ค้นหา */
 .search-results {
   position: absolute;
   top: calc(100% - 10px);
@@ -70,7 +70,7 @@ input::placeholder, textarea::placeholder{color:#a0b8ac;}
 .search-item .mc-id { font-weight: 600; font-size: 13px; color: var(--accent-hover); }
 .search-item .mc-name { font-size: 12px; color: var(--text); margin-top: 2px; }
 
-/* การ์ดแสดงผลเมื่อเลือกเสร็จ */
+/* การ์ดแสดงผลเมื่อเลือก */
 .selected-card {
   display: none;
   background: var(--bg3);
@@ -126,7 +126,6 @@ input::placeholder, textarea::placeholder{color:#a0b8ac;}
 </head>
 <body>
 
-<!-- Header ข้อความล้วน คลีน สบายตา -->
 <div class="header">
   <div class="header-icon">🔧</div>
   <div class="header-info">
@@ -136,14 +135,12 @@ input::placeholder, textarea::placeholder{color:#a0b8ac;}
   </div>
 </div>
 
-<!-- Loading Screen -->
 <div class="loading" id="loading-screen">
   <div class="spinner"></div>
   <div id="loading-msg" style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px;">กำลังโหลดระบบ...</div>
   <div id="loading-sub" style="font-size:13px;color:var(--text2);">ดึงข้อมูลเครื่องจักรจาก Google Sheets</div>
 </div>
 
-<!-- Form -->
 <div id="form-screen" style="display:none;">
   <div class="main">
     <div class="card" id="machine-input-section">
@@ -228,7 +225,6 @@ input::placeholder, textarea::placeholder{color:#a0b8ac;}
   </div>
 </div>
 
-<!-- Success -->
 <div class="success" id="success-screen">
   <div class="success-icon">✅</div>
   <div class="success-title">แจ้งซ่อมสำเร็จ!</div>
@@ -244,7 +240,7 @@ input::placeholder, textarea::placeholder{color:#a0b8ac;}
 <div class="toast" id="toast"></div>
 
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwQeQ9wj_JwQlhPSDcjIEoexupN-FEjprD3RB6enFDKM6PblLRNuTLEhdgO0qPtLxXkVg/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzDX4wpBjfckbo34h4jTqS9gIGWqS09TgZuOC9nUDU1svYNkQ1gGxwmrnfrTyDjp2o/exec';
 
 const params = new URLSearchParams(window.location.search);
 let machineId   = params.get('id')   || '';
